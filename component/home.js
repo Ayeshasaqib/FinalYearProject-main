@@ -1,4 +1,4 @@
-import { StyleSheet, View, Text, TouchableOpacity, Image, ScrollView, ActivityIndicator, TextInput, Alert } from 'react-native';
+import { StyleSheet, View, Text, TouchableOpacity,Modal, Image, ScrollView, ActivityIndicator, TextInput, Alert } from 'react-native';
 import React, { useState, useEffect } from 'react'; // Correct import statement
 import { MaterialCommunityIcons } from '@expo/vector-icons'; // Ensure you have expo vector icons installed
 import * as tf from '@tensorflow/tfjs';
@@ -7,6 +7,8 @@ import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
 import * as jpeg from 'jpeg-js';
 import Output from '../Output';
+
+import POPULAR_PLANTS from '../src/api/diseases.js'
 
 class CustomL2Regularizer {
   constructor(l2) {
@@ -32,11 +34,6 @@ class CustomL2Regularizer {
 
 export default HomeScreen = () => {
   const [searchQuery, setSearchQuery] = useState('');
-
-  // Function to handle the identification process
-  const handleIdentify = () => {
-    // Implement your identification logic here
-  };
   const [image, setImage] = useState(null);
   const [isTfReady, setTfReady] = useState(false);
   const [model, setModel] = useState(null);
@@ -44,28 +41,11 @@ export default HomeScreen = () => {
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [modelStatus, setModelStatus] = useState('Loading TensorFlow model...');
   const [modelerror, setmodelerror] = useState("NULL")
-  const resetState = () => {
-    setImage(null);
-    setPredictions(null);
-    setIsAnalyzing(false);
-  };
-  const POPULAR_PLANTS = [
-    {
-      id: '1',
-      name: 'Scab',
-      imageUri: require('../images/Scab.jpg'),
-    },
-    {
-      id: '2',
-      name: 'Brown Rot',
-      imageUri: require('../images/brownrot.jpg'), // Replace with actual image path or require statement
-    },
-    {
-      id: '3',
-      name: 'Grape Black Rot',
-      imageUri: require('../images/GrapeBlackRot.jpg'), // Replace with actual image path or require statement
-    },
-  ];
+  const [selectedPlant, setSelectedPlant] = useState(false);
+  const [pop, setpop] = useState(false);
+  const [name, setname] = useState();
+  const [val, setval] = useState();
+
   useEffect(() => {
     (async () => {
       try {
@@ -90,35 +70,26 @@ export default HomeScreen = () => {
     })();
   }, []);
 
-  // const handlerSelectImage = async () => {
-  //   try {
-  //     setIsAnalyzing(true);
-  //     let response = await ImagePicker.launchImageLibraryAsync({
-  //       mediaTypes: ImagePicker.MediaTypeOptions.Images,
-  //       allowsEditing: true,
-  //       quality: 1,
-  //       aspect: [4, 3],
-  //     });
+  useEffect(() => {
+    (async () => {
+      const mediaLibraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
+      const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
+      if (mediaLibraryStatus.status !== 'granted' || cameraStatus.status !== 'granted') {
+        alert('We need access to your camera and photos to proceed.');
+      }
+    })();
+  }, []);
+
+  useEffect(() => {
+    setSearchQuery(''); // This will clear the input field
+  }, []);
+
+  const resetState = () => {
+    setImage(null);
+    setPredictions(null);
+    setIsAnalyzing(false);
+  };
   
-  //     if (!response.cancelled) {
-  //       const source = { uri: response.uri };
-  //       setImage(source.uri);
-  //       const imageTensor = await imageToTensor(source);
-  //       const predictionTensor = await model.predict(imageTensor);
-        
-  //       // Convert the tensor to array
-  //       const predictionArray = await predictionTensor.data();
-  //       console.log(predictionArray)
-  //       // Set the predictions state with the array
-  //       setPredictions(predictionArray);
-  
-  //       setIsAnalyzing(false);
-  //     }
-  //   } catch (error) {
-  //     console.error("Error in handlerSelectImage:", error);
-  //     setIsAnalyzing(false);
-  //   }
-  // };
   const handleImageSelection = async () => {
     try {
       const cameraPermissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -179,17 +150,6 @@ export default HomeScreen = () => {
     return resizedImg.expandDims(0).toFloat().div(tf.scalar(255));
   };
 
-  useEffect(() => {
-    (async () => {
-      const mediaLibraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
-      const cameraStatus = await ImagePicker.requestCameraPermissionsAsync();
-      if (mediaLibraryStatus.status !== 'granted' || cameraStatus.status !== 'granted') {
-        alert('We need access to your camera and photos to proceed.');
-      }
-    })();
-  }, []);
-
- 
   async function showImagePickerOptions() {
     return new Promise((resolve) => {
       Alert.alert(
@@ -215,15 +175,71 @@ export default HomeScreen = () => {
     });
   }
 
+  const Pophandler =  ({visible, children}) => {
+   
+    {
+      return(
+        <Modal transparent ={true} visible={visible}>
+          <View style={styles.modelbackground}>
+            <View style={styles.modelcontainer}>       
+               {children}
+            </View>
+          </View>
+        </Modal>
+      );
+    }
+   
+    };
+    
+  const handleSubmitEditing = () => {
+      const foundplant = POPULAR_PLANTS.find(p => p.name.toLowerCase() == searchQuery.toLowerCase());
+      
+      if (foundplant) {
+        setSelectedPlant(foundplant);
+        setpop(true);
+        console.log(selectedPlant)
+      } else {
+        // Handle case where no plant matches the search query
+        console.log("No matching plant found.");
+        setSelectedPlant(false);
+        setpop(false);
+      }
+    };  
+
   return (
     <ScrollView style={styles.container}>
        <ScrollView horizontal={true} style={styles.carouselContainer} showsHorizontalScrollIndicator={false}>
         {POPULAR_PLANTS.map((plant) => (
           <View key={plant.id} style={styles.plantCard}>
+           
+            <TouchableOpacity  onPress={()=>{setpop(true); setval(plant.id)}} >
             <Image source={plant.imageUri} style={styles.plantImage} />
             <Text style={styles.plantName}>{plant.name}</Text>
-            {/* Additional details like user avatars and number added can go here */}
+            </TouchableOpacity>
+
+            <Pophandler visible={pop && plant.id === val }  >
+            <View >
+              <ScrollView>
+                <TouchableOpacity onPress={()=>{setpop(false); setval(0)}}>
+                    {/* <Text style={styles.closebutton}>Close</Text> */}
+                    <MaterialCommunityIcons name="close-octagon-outline" size={50} color="black" />      
+                </TouchableOpacity>
+               
+                <View>
+                  <Text style={styles.plantHeadings}>Symptoms: </Text>
+                  <Text style={styles.plantText}>{plant.symptoms}</Text>
+                  <Text style={styles.plantHeadings}>Causes: </Text>
+                  <Text style={styles.plantText}>{plant.causes}</Text>
+                  <Text style={styles.plantHeadings}>Remedies: </Text>
+                  <Text style={styles.plantText}>{plant.remedies}</Text> 
+                </View> 
+               
+                    
+                </ScrollView> 
+            </View>
+            </Pophandler>
           </View>
+          
         ))}
       </ScrollView>
       <View style={styles.welcomeContainer}>
@@ -247,13 +263,38 @@ export default HomeScreen = () => {
       </TouchableOpacity>
 
       <Output predictions={predictions} />
+
       <View style={styles.searchContainer}>
         <TextInput
           style={styles.searchInput}
           placeholder="Search plant by name"
           value={searchQuery}
           onChangeText={setSearchQuery}
+          onSubmitEditing={handleSubmitEditing}
         />
+       
+        <Pophandler visible={ pop  } >
+        <View >
+              <ScrollView>
+                <TouchableOpacity onPress={()=>{setpop(false); setSelectedPlant(false)}}>
+                    {/* <Text style={styles.closebutton}>Close</Text> */}
+                    <MaterialCommunityIcons name="close-octagon-outline" size={50} color="black" />      
+                </TouchableOpacity>
+               
+                <View>
+                  <Text style={styles.plantHeadings}>Symptoms: </Text>
+                  <Text style={styles.plantText}>{selectedPlant.symptoms}</Text>
+                  <Text style={styles.plantHeadings}>Causes: </Text>
+                  <Text style={styles.plantText}>{selectedPlant.causes}</Text>
+                  <Text style={styles.plantHeadings}>Remedies: </Text>
+                  <Text style={styles.plantText}>{selectedPlant.remedies}</Text> 
+                </View> 
+               
+                    
+                </ScrollView> 
+            </View>
+        </Pophandler>
+            
       </View>
       
       
@@ -290,6 +331,15 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     textAlign: 'center',
     paddingVertical: 5,
+  },
+  plantHeadings: {
+    fontWeight: 'bold',
+    fontSize:20,
+    paddingVertical: 5,
+  },
+  plantText: {
+    textAlign: 'left',
+    //paddingVertical: 5,
   },
   identifyButton: {
     backgroundColor: '#4caf50',
@@ -423,4 +473,27 @@ const styles = StyleSheet.create({
     marginVertical: 10, // Add margin for spacing
     backgroundColor: 'white'
   },
+  
+  modelbackground:{
+    flex:1,
+    backgroundColor:'rgba(0,0,0,0.5)',
+    justifyContent:'center',
+    alignItems:'center',
+  },
+  modelcontainer:{
+    width:'80%',
+    height:'80%',
+    backgroundColor:'white',
+    paddingHorizontal:20,
+    //paddingVertical:30,
+    borderRadius:20,
+    elevation:20,
+  },
+  closebutton:{
+    // marginTop:"0%",
+    // alignItems:'center',
+    color:'Black',
+    fontWeight: 'bold',
+    fontSize:20,
+  }
 });

@@ -1,14 +1,41 @@
-import { StyleSheet, View, Text, TouchableOpacity,Modal, Image, ScrollView, ActivityIndicator, TextInput, Alert } from 'react-native';
-import React, { useState, useEffect } from 'react'; // Correct import statement
-import { MaterialCommunityIcons } from '@expo/vector-icons'; // Ensure you have expo vector icons installed
+// React and React Native core imports
+import React, { useState, useEffect } from 'react';
+import { StyleSheet, 
+View, 
+Text, 
+TouchableOpacity, 
+Modal, 
+Image, 
+ScrollView, 
+ActivityIndicator, 
+TextInput, 
+Alert, 
+KeyboardAvoidingView, 
+Platform, 
+ImageBackground } from 'react-native';
+import Background from '../component/background'; // Import the Background component
+// Third-party imports for icons and TensorFlow.js
+import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import * as tf from '@tensorflow/tfjs';
 import { bundleResourceIO } from '@tensorflow/tfjs-react-native';
+
+// Expo permissions and image picker for handling media
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
-import * as jpeg from 'jpeg-js';
-import Output from '../Output';
 
-import POPULAR_PLANTS from '../src/api/diseases.js'
+// Additional utilities
+import * as jpeg from 'jpeg-js';
+
+// Local imports from your project structure
+import Output from '../Output';
+import POPULAR_PLANTS from '../src/api/diseases';
+import LoadingScreen from './LoadingScreen';
+
+// Note: Ensure you have the necessary packages installed:
+// For icons, TensorFlow.js, permissions, and image picker:
+// expo install @expo/vector-icons expo-permissions expo-image-picker
+// npm install @tensorflow/tfjs @tensorflow/tfjs-react-native jpeg-js
+
 
 class CustomL2Regularizer {
   constructor(l2) {
@@ -45,20 +72,20 @@ export default HomeScreen = () => {
   const [pop, setpop] = useState(false);
   const [name, setname] = useState();
   const [val, setval] = useState();
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
     (async () => {
+      setIsLoading(true); // Start loading
       try {
         await tf.ready();
         setTfReady(true);
         tf.serialization.registerClass(CustomL2Regularizer);
-
+  
         const modelJson = require('../models/model.json');
         const weights = require('../models/shared.bin');
       
-        // const loadedModel = await tf.loadLayersModel('./assets/CustomModel3/model.json');
         const loadedModel = await tf.loadLayersModel(bundleResourceIO(modelJson, weights));
-
         setModel(loadedModel);
         setModelStatus('Model loaded successfully');
       } catch (error) {
@@ -66,10 +93,11 @@ export default HomeScreen = () => {
         setmodelerror(error.message)
         setModelStatus('Failed to load model');
       }
-      getPermissionAsync();
+      setIsLoading(false); // End loading once everything is done
+      await getPermissionAsync(); // Assume this is an async operation
     })();
   }, []);
-
+  
   useEffect(() => {
     (async () => {
       const mediaLibraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -207,6 +235,16 @@ export default HomeScreen = () => {
     };  
 
   return (
+    
+    isLoading ? 
+    <LoadingScreen/> :
+    <Background>  
+    <KeyboardAvoidingView 
+      style={styles.container} 
+      behavior={Platform.OS === "ios" ? "padding" : "height"} 
+      keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 80}
+    >
+    <ScrollView style={styles.fullScreen}>
     <ScrollView style={styles.container}>
        <ScrollView horizontal={true} style={styles.carouselContainer} showsHorizontalScrollIndicator={false}>
         {POPULAR_PLANTS.map((plant) => (
@@ -265,13 +303,16 @@ export default HomeScreen = () => {
       <Output predictions={predictions} />
 
       <View style={styles.searchContainer}>
-        <TextInput
+          <TextInput
           style={styles.searchInput}
           placeholder="Search plant by name"
           value={searchQuery}
           onChangeText={setSearchQuery}
           onSubmitEditing={handleSubmitEditing}
         />
+        <TouchableOpacity onPress={handleSubmitEditing} style={styles.searchButton}>
+          <MaterialIcons name="search" size={25} color="#6a994e" />
+        </TouchableOpacity>
        
         <Pophandler visible={ pop  } >
         <View >
@@ -296,9 +337,10 @@ export default HomeScreen = () => {
         </Pophandler>
             
       </View>
-      
-      
     </ScrollView>
+    </ScrollView>
+    </KeyboardAvoidingView>
+    </Background>
   );
 };
     
@@ -307,6 +349,9 @@ export default HomeScreen = () => {
 
 
 const styles = StyleSheet.create({
+  fullScreen: {
+    flex: 1,
+  },
   container: {
     flex: 1,
     backgroundColor: '#e9edc9',
@@ -372,11 +417,25 @@ const styles = StyleSheet.create({
     flex: 1,
     borderWidth: 1,
     borderColor: '#ccc',
-    borderRadius: 25, // Increase the border radius for a more rounded appearance
-    paddingVertical: 15, // Increase padding to make the input taller
+    borderRadius: 25,
+    paddingVertical: 15,
     paddingHorizontal: 20,
     backgroundColor: 'white',
-    fontSize: 18, // Increase font size for better visibility
+    fontSize: 18,
+    marginRight: 15, // Added margin here
+  },
+  searchButton: {
+    marginLeft: 10,
+    justifyContent: 'center',
+    padding: 15,
+    backgroundColor: '#d9ed92',
+    borderRadius: 25, // Make it circular
+    elevation: 2, // Optional for shadow on Android
+    // Add shadow for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
   },
   container1: {
     flex: 1,

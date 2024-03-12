@@ -1,13 +1,16 @@
-import { View, Text, StyleSheet, ScrollView, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import React, { useState, useEffect } from 'react';
+import Background from './background';
 
 const Notifications = () => {
+  
   const [notifications, setNotifications] = useState([]);
 
   // Example function to fetch notifications (replace with your actual data fetching logic)
   useEffect(() => {
     const fetchNotifications = async () => {
       // Mock notifications
+
       const fetchedNotifications = [
         { id: 1, title: 'New Disease Detected', message: 'Your plant may have leaf spot disease.' },
         { id: 2, title: 'Watering Reminder', message: 'It\'s time to water your fern.' },
@@ -23,6 +26,7 @@ const Notifications = () => {
   }, []);
 
   return (
+    <Background>
     <ScrollView style={styles.container}>
       <View style={styles.notificationContainer}>
         {notifications.map(notification => (
@@ -32,7 +36,9 @@ const Notifications = () => {
           </TouchableOpacity>
         ))}
       </View>
+
     </ScrollView>
+    </Background>
   );
 };
 

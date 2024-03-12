@@ -1,73 +1,59 @@
-import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, View, Image, SafeAreaView, Text, ImageBackground } from 'react-native';
 import React from 'react';
-import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { StatusBar, StyleSheet, Text, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
+import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Screens
-import Profile from './component/profile';
+import ProfileScreen from './component/profile';
 import HomeScreen from './component/home';
-import Notifications from './component/notifications';
-import Settings from './component/settings';
+import NotificationsScreen from './component/notifications';
+import SettingsScreen from './component/settings';
 
 const Tab = createBottomTabNavigator();
 
+// Define your icons and labels for the bottom tab navigator here
+const screenOptions = ({ route }) => ({
+  tabBarIcon: ({ focused, color, size }) => {
+    const icons = {
+      Home: focused ? 'camera' : 'camera-outline',
+      Updates: focused ? 'bell' : 'bell-outline',
+      Settings: focused ? 'cog' : 'cog-outline',
+      Profile: focused ? 'account-circle' : 'account-circle-outline',
+    };
+    return <MaterialCommunityIcons name={icons[route.name]} size={size} color={color} />;
+  },
+  tabBarLabel: ({ focused }) => {
+    const labels = {
+      Home: 'Home',
+      Updates: 'Updates',
+      Settings: 'Settings',
+      Profile: 'Profile',
+    };
+    return <Text style={{ color: focused ? '#386641' : '#C0C0C0' }}>{focused ? labels[route.name] : ''}</Text>;
+  },
+  tabBarActiveTintColor: '#386641',
+  tabBarInactiveTintColor: '#C0C0C0',
+  tabBarStyle: styles.tabBar,
+});
+
 export default function App() {
   return (
-    <NavigationContainer>
-      <StatusBar style="auto" />
-      <Tab.Navigator
-        initialRouteName="Home"
-        screenOptions={({ route }) => ({
-          tabBarIcon: ({ focused, color, size }) => {
-            let iconName;
-            if (route.name === 'Home') {
-              iconName = focused ? 'camera' : 'camera-outline';
-            } else if (route.name === 'Updates') {
-              iconName = focused ? 'bell' : 'bell-outline';
-            } else if (route.name === 'Setting') {
-              iconName = focused ? 'cog' : 'cog-outline';
-            } else if (route.name === 'Profile') {
-              iconName = focused ? 'account-circle' : 'account-circle-outline';
-            }
-            return <MaterialCommunityIcons name={iconName} size={size} color={color} />;
-          },
-          tabBarLabel: ({ focused }) => {
-            let label;
-            if (route.name === 'Home') {
-              label = focused ? 'Recognize' : '';
-            } else if (route.name === 'Updates') {
-              label = focused ? 'Updates' : '';
-            } else if (route.name === 'Setting') {
-              label = focused ? 'Setting' : '';
-            } else if (route.name === 'Profile') {
-              label = focused ? 'Profile' : '';
-            }
-            return <Text style={{ color: focused ? '#386641' : '#C0C0C0' }}>{label}</Text>;
-          },
-          tabBarActiveTintColor: '#386641',
-          tabBarInactiveTintColor: '#C0C0C0',
-          tabBarStyle: {
-            backgroundColor: '#F9F6EE',
-            height: 60,
-            paddingBottom: 10, // for iOS mostly to ensure label is visible
-            paddingTop: 10, // same as above
-            borderTopWidth: 0,
-            shadowColor: '#000',
-            shadowOffset: { width: 0, height: -2 },
-            shadowOpacity: 0.1,
-            shadowRadius: 4,
-            elevation: 5,
-          },
-        })}
-      >
-        <Tab.Screen name="Home" component={HomeScreen} />
-        <Tab.Screen name="Updates" component={Notifications} />
-        <Tab.Screen name="Setting" component={Settings} />
-        <Tab.Screen name="Profile" component={Profile} />
-      </Tab.Navigator>
-    </NavigationContainer>
+    <ImageBackground
+      source={require('./assets/background.jpg')} // Make sure this path is correct for your image
+      resizeMode="cover" // or "contain" if you don't want the image to be cropped
+      style={{ flex: 1 }}
+    >
+      <NavigationContainer>
+        <StatusBar style="auto" />
+        <Tab.Navigator initialRouteName="Home" screenOptions={screenOptions}>
+          <Tab.Screen name="Home" component={HomeScreen} />
+          <Tab.Screen name="Updates" component={NotificationsScreen} />
+          <Tab.Screen name="Settings" component={SettingsScreen} />
+          <Tab.Screen name="Profile" component={ProfileScreen} />
+        </Tab.Navigator>
+      </NavigationContainer>
+    </ImageBackground>
   );
 }
 
@@ -103,17 +89,7 @@ const styles = StyleSheet.create({
     height: 40, // Reduced height for a smaller logo
   },
   tabBar: {
-    height: 60,
-    borderTopWidth: 0,
-    backgroundColor: '#F9F6EE',
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: -2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 4,
-    elevation: 5,
-  },
-  tabBar: {
-    height: 60,
+    height: 50,
     borderTopWidth: 0,
     backgroundColor: '#F9F6EE',
     shadowColor: '#000',
@@ -143,7 +119,5 @@ const styles = StyleSheet.create({
     color: '#F9F6EE', // Contrast color for text inside button
     fontWeight: 'bold',
   },
-  // Styles for buttons and text from your previous styles can remain the same
-  // ...
 });
 

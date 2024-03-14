@@ -9,7 +9,9 @@ import ProfileScreen from './component/profile';
 import HomeScreen from './component/home';
 import NotificationsScreen from './component/notifications';
 import SettingsScreen from './component/settings';
-
+import ContactUsScreen from './component/ContactUsScreen';
+import FAQScreen from './component/Faq';
+import TermsAndConditionsScreen from './component/terms&Conditions';
 const Tab = createBottomTabNavigator();
 
 // Define your icons and labels for the bottom tab navigator here

@@ -1,16 +1,20 @@
-import { View, Text, StyleSheet, Image, TouchableOpacity } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import React from 'react';
 
 const Profile = () => {
   // Placeholder data - replace with real user data
-  const userName = 'John Doe';
-  const userEmail = 'johndoe@example.com';
+  const userName = 'Hurerah';
+  const userEmail = 'Abuhurerah.saleem@gmail.com';
 
   return (
-    <View style={styles.container}>
+    <ImageBackground
+      source={require('../assets/background.jpg')}
+      style={styles.background}
+    >
+      <View style={styles.container}>
       <View style={styles.profileHeader}>
         <Image 
-          source={{ uri: 'https://via.placeholder.com/150' }} 
+          source={require("../assets/user.jpg")} 
           style={styles.profilePic} 
         />
         <Text style={styles.userName}>{userName}</Text>
@@ -29,6 +33,8 @@ const Profile = () => {
         </TouchableOpacity>
       </View>
     </View>
+    </ImageBackground>
+
   );
 };
 
@@ -36,7 +42,6 @@ export default Profile;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#e9edc9',
     flex: 1,
     alignItems: 'center',
     justifyContent: 'center',
@@ -75,5 +80,10 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.2,
     shadowRadius: 1,
     elevation: 3,
+  },
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%'
   },
 });

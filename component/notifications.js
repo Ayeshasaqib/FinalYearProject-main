@@ -26,7 +26,10 @@ const Notifications = () => {
   }, []);
 
   return (
-    <Background>
+    <ImageBackground
+      source={require('../assets/notification.jpg')}
+      style={styles.background}
+    >
     <ScrollView style={styles.container}>
       <View style={styles.notificationContainer}>
         {notifications.map(notification => (
@@ -38,7 +41,8 @@ const Notifications = () => {
       </View>
 
     </ScrollView>
-    </Background>
+    </ImageBackground>
+
   );
 };
 
@@ -46,7 +50,6 @@ export default Notifications;
 
 const styles = StyleSheet.create({
   container: {
-    backgroundColor: '#e9edc9',
     flex: 1,
   },
   notificationContainer: {
@@ -67,4 +70,9 @@ const styles = StyleSheet.create({
     fontWeight: 'bold',
     marginBottom: 5,
   },
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%'
+  }
 });

@@ -238,13 +238,19 @@ export default HomeScreen = () => {
     
     isLoading ? 
     <LoadingScreen/> :
-    <Background>  
+    //<Background>  
+    
     <KeyboardAvoidingView 
       style={styles.container} 
       behavior={Platform.OS === "ios" ? "padding" : "height"} 
       keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 80}
     >
+    <ImageBackground
+      source={require('../assets/back1.jpg')}
+      style={styles.background}
+    >
     <ScrollView style={styles.fullScreen}>
+    
     <ScrollView style={styles.container}>
        <ScrollView horizontal={true} style={styles.carouselContainer} showsHorizontalScrollIndicator={false}>
         {POPULAR_PLANTS.map((plant) => (
@@ -339,8 +345,10 @@ export default HomeScreen = () => {
       </View>
     </ScrollView>
     </ScrollView>
+    </ImageBackground>
+
     </KeyboardAvoidingView>
-    </Background>
+    //</Background>
   );
 };
     
@@ -354,7 +362,6 @@ const styles = StyleSheet.create({
   },
   container: {
     flex: 1,
-    backgroundColor: '#e9edc9',
   },
   carouselContainer: {
     flexDirection: 'row',
@@ -554,5 +561,10 @@ const styles = StyleSheet.create({
     color:'Black',
     fontWeight: 'bold',
     fontSize:20,
-  }
+  },
+  background: {
+    flex: 1,
+    width: '100%',
+    height: '100%'
+  },
 });

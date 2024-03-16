@@ -16,7 +16,7 @@ const SettingsOption = ({ icon, title, onPress, iconImg }) => (
   </TouchableOpacity>
 );
 
-const Settings = () => {
+const Settings = ({navigation}) => {
   return (
     <ImageBackground
       source={require('../assets/setting.jpg')}
@@ -26,10 +26,27 @@ const Settings = () => {
         style={styles.container}
         contentContainerStyle={styles.contentContainer} // Apply layout styles here
       >
-        <SettingsOption iconImg={require('../assets/darkmode.png')} title="Dark Mode" onPress={() => {}} />
-        <SettingsOption iconImg={require('../assets/terms.png')} title="Terms and Conditions" onPress={() => {}} />
-        <SettingsOption iconImg={require('../assets/FAQ.png')} title="FAQ" onPress={() => {}} />
-        <SettingsOption iconImg={require('../assets/contact.png')} title="Contact Us" onPress={() => {}} />
+        <SettingsOption iconImg={require('../assets/darkmode.png')} title="Dark Mode" onPress=
+              {
+                  ()=>navigation.navigate('Settings', 
+                  {screen: 'Contact us' } )
+              } />
+        <SettingsOption iconImg={require('../assets/terms.png')} title="Terms and Conditions" onPress=
+              {
+                ()=>navigation.navigate('Settings', 
+                {screen: 'Terms and Conditions' } )
+              } />
+        <SettingsOption iconImg={require('../assets/FAQ.png')} title="FAQ" onPress=
+        {
+          ()=>navigation.navigate('Settings', 
+          {screen: 'FAQ' } )
+      } />
+      
+        <SettingsOption iconImg={require('../assets/contact.png')} title="Contact Us" onPress=
+        {
+          ()=>navigation.navigate('Settings', 
+          {screen: 'Contact us' } )
+      } />
       </ScrollView>
     </ImageBackground>
   );

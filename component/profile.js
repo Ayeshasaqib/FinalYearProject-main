@@ -1,7 +1,9 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import React from 'react';
+import LoginScreen from './login';
+import RegisterScreen from './SignUp';
 
-const Profile = () => {
+const Profile = ({navigation}) => {
   // Placeholder data - replace with real user data
   const userName = 'Hurerah';
   const userEmail = 'Abuhurerah.saleem@gmail.com';
@@ -22,8 +24,21 @@ const Profile = () => {
       </View>
 
       <View style={styles.profileActions}>
-        <TouchableOpacity style={styles.actionButton}>
-          <Text>Edit Profile</Text>
+        <TouchableOpacity style={styles.actionButton} 
+         onPress=
+              {
+                  ()=>navigation.navigate('Profilee', 
+                  {screen: 'Login' } )
+              } >
+          <Text>Login </Text>
+        </TouchableOpacity>
+        <TouchableOpacity style={styles.actionButton} 
+        onPress=
+              {
+                  ()=>navigation.navigate('Profilee', 
+                  {screen: 'Sign up' } )
+              } >
+          <Text>Sign up </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton}>
           <Text>Settings</Text>

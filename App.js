@@ -2,6 +2,7 @@ import React from 'react';
 import { StatusBar, StyleSheet, Text, ImageBackground } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
+import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Screens
@@ -12,27 +13,52 @@ import SettingsScreen from './component/settings';
 import ContactUsScreen from './component/ContactUsScreen';
 import FAQScreen from './component/Faq';
 import TermsAndConditionsScreen from './component/terms&Conditions';
-import loginScreen from './component/login'
-import  SignUpScreen from "./component/SignUp";
+import LoginScreen from './component/login'
+import  RegisterScreen from "./component/SignUp";
+import Pophandler from './component/pophandler';
 const Tab = createBottomTabNavigator();
-
+const HomeStack = createStackNavigator();
+const updateStack = createStackNavigator();
+const profileStack = createStackNavigator();
+// Define Home stack navigator
+const HomeStackScreen = () => (
+  <HomeStack.Navigator  >
+    <HomeStack.Screen name="Home" component={HomeScreen} />
+    <HomeStack.Screen name="Disease Details" component={Pophandler} />
+  </HomeStack.Navigator>
+);
+const UpdateStackScreen = () => (
+  <updateStack.Navigator  >
+    <updateStack.Screen name="Setting" component={SettingsScreen} />
+    <updateStack.Screen name="Contact us" component={ContactUsScreen} />
+    <updateStack.Screen name="FAQ" component={FAQScreen} />
+    <updateStack.Screen name="Terms and Conditions" component={TermsAndConditionsScreen} />
+  </updateStack.Navigator>
+);
+const ProfileStackScreen = () => (
+  <profileStack.Navigator  >
+    <profileStack.Screen name="Profile" component={ProfileScreen} />
+    <profileStack.Screen name="Login" component={LoginScreen} />
+    <profileStack.Screen name="Sign up" component={RegisterScreen} />
+  </profileStack.Navigator>
+);
 // Define your icons and labels for the bottom tab navigator here
 const screenOptions = ({ route }) => ({
   tabBarIcon: ({ focused, color, size }) => {
     const icons = {
-      Home: focused ? 'camera' : 'camera-outline',
+      HomeScreen: focused ? 'camera' : 'camera-outline',
       Updates: focused ? 'bell' : 'bell-outline',
       Settings: focused ? 'cog' : 'cog-outline',
-      Profile: focused ? 'account-circle' : 'account-circle-outline',
+      Profilee: focused ? 'account-circle' : 'account-circle-outline',
     };
     return <MaterialCommunityIcons name={icons[route.name]} size={size} color={color} />;
   },
   tabBarLabel: ({ focused }) => {
     const labels = {
-      Home: 'Home',
+      Home: 'HomeScreen',
       Updates: 'Updates',
       Settings: 'Settings',
-      Profile: 'Profile',
+      Profilee: 'Profile',
     };
     return <Text style={{ color: focused ? '#386641' : '#C0C0C0' }}>{focused ? labels[route.name] : ''}</Text>;
   },
@@ -50,11 +76,11 @@ export default function App() {
     >
       <NavigationContainer>
         <StatusBar style="auto" />
-        <Tab.Navigator initialRouteName="Home" screenOptions={screenOptions}>
-          <Tab.Screen name="Home" component={HomeScreen} />
+        <Tab.Navigator initialRouteName="HomeStackScreen" screenOptions={screenOptions}>
+          <Tab.Screen name="HomeScreen" component={HomeStackScreen} />
           <Tab.Screen name="Updates" component={NotificationsScreen} />
-          <Tab.Screen name="Settings" component={loginScreen} />
-          <Tab.Screen name="Profile" component={SignUpScreen} />
+          <Tab.Screen name="Settings" component={UpdateStackScreen} />
+          <Tab.Screen name="Profilee" component={ProfileStackScreen } />
         </Tab.Navigator>
       </NavigationContainer>
     </ImageBackground>

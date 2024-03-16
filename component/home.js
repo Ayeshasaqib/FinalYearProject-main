@@ -30,7 +30,7 @@ import * as jpeg from 'jpeg-js';
 import Output from '../Output';
 import POPULAR_PLANTS from '../src/api/diseases';
 import LoadingScreen from './LoadingScreen';
-
+import Pophandler from './pophandler';
 // Note: Ensure you have the necessary packages installed:
 // For icons, TensorFlow.js, permissions, and image picker:
 // expo install @expo/vector-icons expo-permissions expo-image-picker
@@ -59,7 +59,7 @@ class CustomL2Regularizer {
 }
 
 
-export default HomeScreen = () => {
+export default HomeScreen = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [image, setImage] = useState(null);
   const [isTfReady, setTfReady] = useState(false);
@@ -203,34 +203,15 @@ export default HomeScreen = () => {
     });
   }
 
-  const Pophandler =  ({visible, children}) => {
-   
-    {
-      return(
-        <Modal transparent ={true} visible={visible}>
-          <View style={styles.modelbackground}>
-            <View style={styles.modelcontainer}>       
-               {children}
-            </View>
-          </View>
-        </Modal>
-      );
-    }
-   
-    };
-    
+ 
   const handleSubmitEditing = () => {
       const foundplant = POPULAR_PLANTS.find(p => p.name.toLowerCase() == searchQuery.toLowerCase());
       
       if (foundplant) {
-        setSelectedPlant(foundplant);
-        setpop(true);
-        console.log(selectedPlant)
+        setval(foundplant.id);
       } else {
-        // Handle case where no plant matches the search query
+        setval(0)
         console.log("No matching plant found.");
-        setSelectedPlant(false);
-        setpop(false);
       }
     };  
 
@@ -252,36 +233,17 @@ export default HomeScreen = () => {
     <ScrollView style={styles.container}>
        <ScrollView horizontal={true} style={styles.carouselContainer} showsHorizontalScrollIndicator={false}>
         {POPULAR_PLANTS.map((plant) => (
+
           <View key={plant.id} style={styles.plantCard}>
-           
-            <TouchableOpacity  onPress={()=>{setpop(true); setval(plant.id)}} >
+           <TouchableOpacity  onPress={()=>navigation.navigate('HomeScreen', 
+              {screen: 'Disease Details',
+               params:
+                { val: plant.id },} )} >
             <Image source={plant.imageUri} style={styles.plantImage} />
             <Text style={styles.plantName}>{plant.name}</Text>
             </TouchableOpacity>
-
-            <Pophandler visible={pop && plant.id === val }  >
-            <View >
-              <ScrollView>
-                <TouchableOpacity onPress={()=>{setpop(false); setval(0)}}>
-                    {/* <Text style={styles.closebutton}>Close</Text> */}
-                    <MaterialCommunityIcons name="close-octagon-outline" size={50} color="black" />      
-                </TouchableOpacity>
-               
-                <View>
-                  <Text style={styles.plantHeadings}>Symptoms: </Text>
-                  <Text style={styles.plantText}>{plant.symptoms}</Text>
-                  <Text style={styles.plantHeadings}>Causes: </Text>
-                  <Text style={styles.plantText}>{plant.causes}</Text>
-                  <Text style={styles.plantHeadings}>Remedies: </Text>
-                  <Text style={styles.plantText}>{plant.remedies}</Text> 
-                </View> 
-               
-                    
-                </ScrollView> 
-            </View>
-            </Pophandler>
           </View>
-          
+
         ))}
       </ScrollView>
       <View style={styles.welcomeContainer}>
@@ -314,32 +276,16 @@ export default HomeScreen = () => {
           onChangeText={setSearchQuery}
           onSubmitEditing={handleSubmitEditing}
         />
-        <TouchableOpacity onPress={handleSubmitEditing} style={styles.searchButton}>
+         
+        <TouchableOpacity 
+              onPress={()=>navigation.navigate('HomeScreen', 
+                {screen: 'Disease Details',
+                params:
+                  { val: val },} )} 
+              style={styles.searchButton}>
           <MaterialIcons name="search" size={25} color="#6a994e" />
         </TouchableOpacity>
-       
-        <Pophandler visible={ pop  } >
-        <View >
-              <ScrollView>
-                <TouchableOpacity onPress={()=>{setpop(false); setSelectedPlant(false)}}>
-                    {/* <Text style={styles.closebutton}>Close</Text> */}
-                    <MaterialCommunityIcons name="close-octagon-outline" size={50} color="black" />      
-                </TouchableOpacity>
-               
-                <View>
-                  <Text style={styles.plantHeadings}>Symptoms: </Text>
-                  <Text style={styles.plantText}>{selectedPlant.symptoms}</Text>
-                  <Text style={styles.plantHeadings}>Causes: </Text>
-                  <Text style={styles.plantText}>{selectedPlant.causes}</Text>
-                  <Text style={styles.plantHeadings}>Remedies: </Text>
-                  <Text style={styles.plantText}>{selectedPlant.remedies}</Text> 
-                </View> 
-               
-                    
-                </ScrollView> 
-            </View>
-        </Pophandler>
-            
+        
       </View>
     </ScrollView>
     </ScrollView>

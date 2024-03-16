@@ -12,6 +12,8 @@ import SettingsScreen from './component/settings';
 import ContactUsScreen from './component/ContactUsScreen';
 import FAQScreen from './component/Faq';
 import TermsAndConditionsScreen from './component/terms&Conditions';
+import loginScreen from './component/login'
+import  SignUpScreen from "./component/SignUp";
 const Tab = createBottomTabNavigator();
 
 // Define your icons and labels for the bottom tab navigator here
@@ -51,8 +53,8 @@ export default function App() {
         <Tab.Navigator initialRouteName="Home" screenOptions={screenOptions}>
           <Tab.Screen name="Home" component={HomeScreen} />
           <Tab.Screen name="Updates" component={NotificationsScreen} />
-          <Tab.Screen name="Settings" component={SettingsScreen} />
-          <Tab.Screen name="Profile" component={ProfileScreen} />
+          <Tab.Screen name="Settings" component={loginScreen} />
+          <Tab.Screen name="Profile" component={SignUpScreen} />
         </Tab.Navigator>
       </NavigationContainer>
     </ImageBackground>

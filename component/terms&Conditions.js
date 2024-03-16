@@ -4,7 +4,7 @@ import { View, Text, StyleSheet, ScrollView } from 'react-native';
 const TermsAndConditionsScreen = () => {
   return (
     <ScrollView style={styles.container}>
-      <Text style={styles.lastUpdated}>Last updated: [Date]</Text>
+      <Text style={styles.lastUpdated}>Last updated: [12-03-2023]</Text>
 
       <Text style={styles.sectionTitle}>1. Use of the App</Text>
       <Text style={styles.paragraph}>

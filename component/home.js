@@ -238,8 +238,6 @@ export default HomeScreen = () => {
     
     isLoading ? 
     <LoadingScreen/> :
-    //<Background>  
-    
     <KeyboardAvoidingView 
       style={styles.container} 
       behavior={Platform.OS === "ios" ? "padding" : "height"} 

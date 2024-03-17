@@ -1,27 +1,16 @@
 import React from 'react';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-import { Text } from 'react-native';
+import { Text, StyleSheet } from 'react-native'; // Import StyleSheet here
 
 import HomeStackScreen from './HomeStack';
 import UpdateStackScreen from './UpdateStack';
 import ProfileStackScreen from './ProfileStack';
 import NotificationsScreen from '../component/notifications';
-import styles from '../styles/BottomTabStyles'; // Separated styles
 
 const Tab = createBottomTabNavigator();
 
-const BottomTabNavigator = () => {
-  return (
-    <Tab.Navigator initialRouteName="Home" screenOptions={screenOptions} >
-      <Tab.Screen name="Home" component={HomeStackScreen} />
-      <Tab.Screen name="Updates" component={NotificationsScreen} />
-      <Tab.Screen name="Settings" component={UpdateStackScreen} />
-      <Tab.Screen name="Profile" component={ProfileStackScreen} />
-    </Tab.Navigator>
-  );
-};
-
+// Define screenOptions here, before using it
 const screenOptions = ({ route }) => ({
   tabBarIcon: ({ focused, color, size }) => {
     let iconName;
@@ -41,25 +30,35 @@ const screenOptions = ({ route }) => ({
   tabBarStyle: styles.tabBar,
 });
 
+const BottomTabNavigator = () => {
+  return (
+    <Tab.Navigator initialRouteName="Home" screenOptions={screenOptions}>
+      <Tab.Screen name="Home" component={HomeStackScreen} />
+      <Tab.Screen name="Updates" component={NotificationsScreen} />
+      <Tab.Screen name="Settings" component={UpdateStackScreen} />
+      <Tab.Screen name="Profile" component={ProfileStackScreen} />
+    </Tab.Navigator>
+  );
+};
+
 export default BottomTabNavigator;
 
-
 const styles = StyleSheet.create({
-    tabBar: {
-      height: 50,
-      borderTopWidth: 0,
-      backgroundColor: '#F9F6EE',
-      shadowColor: '#000',
-      shadowOffset: { width: 0, height: -2 },
-      shadowOpacity: 0.1,
-      shadowRadius: 4,
-      elevation: 5,
-    },
-    tabBarLabel: {
-      color: '#C0C0C0',
-    },
-    tabBarLabelFocused: {
-      color: '#386641',
-    },
-    // Add other styles related to the tab bar here
-  });
+  tabBar: {
+    height: 50,
+    borderTopWidth: 0,
+    backgroundColor: '#F9F6EE',
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: -2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 4,
+    elevation: 5,
+  },
+  tabBarLabel: {
+    color: '#C0C0C0',
+  },
+  tabBarLabelFocused: {
+    color: '#386641',
+  },
+  // Add other styles related to the tab bar here
+});

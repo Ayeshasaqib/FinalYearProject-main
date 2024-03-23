@@ -1,9 +1,9 @@
 import React from 'react';
 import { createStackNavigator } from '@react-navigation/stack';
-import SettingsScreen from '../component/settings';
-import ContactUsScreen from '../component/ContactUsScreen';
-import FAQScreen from '../component/Faq';
-import TermsAndConditionsScreen from '../component/terms&Conditions';
+import SettingsScreen from '../Screen/settings';
+import ContactUsScreen from '../Screen/ContactUsScreen';
+import FAQScreen from '../Screen/Faq';
+import TermsAndConditionsScreen from '../Screen/terms&Conditions';
 
 const UpdateStack = createStackNavigator();
 

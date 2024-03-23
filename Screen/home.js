@@ -29,8 +29,8 @@ import * as jpeg from 'jpeg-js';
 // Local imports from your project structure
 import Output from '../Output';
 import POPULAR_PLANTS from '../src/api/diseases';
-import LoadingScreen from './LoadingScreen';
-import Pophandler from './pophandler';
+import LoadingScreen from '../component/LoadingAnimation';
+import Pophandler from '../component/pophandler';
 // Note: Ensure you have the necessary packages installed:
 // For icons, TensorFlow.js, permissions, and image picker:
 // expo install @expo/vector-icons expo-permissions expo-image-picker
@@ -229,7 +229,7 @@ export default HomeScreen = ({navigation}) => {
 
 
 
-
+  
 
   
   const handleSubmitEditing = () => {
@@ -243,6 +243,22 @@ export default HomeScreen = ({navigation}) => {
       }
     };  
 
+    const renderPlantCard = (plant) => {
+      return (
+        <TouchableOpacity
+          key={plant.id}
+          onPress={() => navigation.navigate('Disease Details', { val: plant.id })}
+          style={styles.cardContainer}
+        >
+          <ImageBackground source={plant.imageUri} style={styles.cardImage} imageStyle={styles.cardImageInner}>
+            <View style={styles.cardOverlay}>
+              <Text style={styles.cardTitle}>{plant.name}</Text>
+              {/* You can add more details or actions here */}
+            </View>
+          </ImageBackground>
+        </TouchableOpacity>
+      );
+    };
   return (
     
     isLoading ? 
@@ -259,21 +275,9 @@ export default HomeScreen = ({navigation}) => {
     <ScrollView style={styles.fullScreen}>
     
     <ScrollView style={styles.container}>
-       <ScrollView horizontal={true} style={styles.carouselContainer} showsHorizontalScrollIndicator={false}>
-        {POPULAR_PLANTS.map((plant) => (
-
-          <View key={plant.id} style={styles.plantCard}>
-           <TouchableOpacity  onPress={()=>navigation.navigate('HomeScreen', 
-              {screen: 'Disease Details',
-               params:
-                { val: plant.id },} )} >
-            <Image source={plant.imageUri} style={styles.plantImage} />
-            <Text style={styles.plantName}>{plant.name}</Text>
-            </TouchableOpacity>
-          </View>
-
-        ))}
-      </ScrollView>
+    <ScrollView horizontal={true} style={styles.carouselContainer} showsHorizontalScrollIndicator={false}>
+      {POPULAR_PLANTS.map(renderPlantCard)}
+    </ScrollView>
       <View style={styles.welcomeContainer}>
         <Text style={styles.headerText}>Welcome to Leaf Care</Text>
         <Text style={styles.infoText}>
@@ -538,5 +542,36 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: '100%'
+  },
+  cardContainer: {
+    width: 180, // fixed width for the card
+    height: 220, // fixed height for the card
+    borderRadius: 15, // rounded corners
+    overflow: 'hidden', // this will hide the image behind the border radius
+    marginHorizontal: 10, // space between cards
+    shadowColor: '#000', // shadow for card
+    shadowOffset: { width: 0, height: 5 },
+    shadowOpacity: 0.3,
+    shadowRadius: 5,
+    elevation: 8, // shadow for Android
+    borderColor: '#FFFFFF',
+    borderWidth:2,
+  },
+  cardImage: {
+    flex: 1, // image will fill the container
+    justifyContent: 'flex-end', // align the overlay text to the bottom
+  },
+  cardImageInner: {
+    borderRadius: 15, // ensure the inner image also has rounded corners
+  },
+  cardOverlay: {
+    backgroundColor: '#FFFFFF', // semi-transparent overlay for text readability
+    padding: 10, // padding inside the overlay
+  },
+  cardTitle: {
+    fontWeight: 'bold',
+    color: '#000000', // white color for the text
+    fontSize: 18, // larger font size for the title
+    textAlign: 'center'
   },
 });

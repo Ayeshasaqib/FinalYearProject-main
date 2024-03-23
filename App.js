@@ -6,15 +6,15 @@ import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
 
 // Screens
-import ProfileScreen from './component/profile';
-import HomeScreen from './component/home';
-import NotificationsScreen from './component/notifications';
-import SettingsScreen from './component/settings';
-import ContactUsScreen from './component/ContactUsScreen';
-import FAQScreen from './component/Faq';
-import TermsAndConditionsScreen from './component/terms&Conditions';
-import LoginScreen from './component/login'
-import  RegisterScreen from "./component/SignUp";
+import ProfileScreen from './Screen/profile';
+import HomeScreen from './Screen/home';
+import NotificationsScreen from './Screen/notifications';
+import SettingsScreen from './Screen/settings';
+import ContactUsScreen from './Screen/ContactUsScreen';
+import FAQScreen from './Screen/Faq';
+import TermsAndConditionsScreen from './Screen/terms&Conditions';
+import LoginScreen from './Screen/login'
+import  RegisterScreen from "./Screen/SignUp";
 import Pophandler from './component/pophandler';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();

@@ -1,7 +1,7 @@
 import { View, Text, StyleSheet, Image, TouchableOpacity, ImageBackground } from 'react-native';
 import React from 'react';
-import LoginScreen from './login';
-import RegisterScreen from './SignUp';
+import LoginScreen from '../Screen/login';
+import RegisterScreen from '../Screen/SignUp';
 
 const Profile = ({navigation}) => {
   // Placeholder data - replace with real user data

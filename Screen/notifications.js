@@ -1,6 +1,5 @@
 import { View, Text, StyleSheet, ScrollView, TouchableOpacity, ImageBackground } from 'react-native';
 import React, { useState, useEffect } from 'react';
-import Background from './background';
 
 const Notifications = () => {
   

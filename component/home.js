@@ -204,6 +204,34 @@ export default HomeScreen = ({navigation}) => {
   }
 
  
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+  
   const handleSubmitEditing = () => {
       const foundplant = POPULAR_PLANTS.find(p => p.name.toLowerCase() == searchQuery.toLowerCase());
       

@@ -1,5 +1,28 @@
 import React from 'react';
-import { View, Text, StyleSheet, ScrollView, Image } from 'react-native';
+import { View, Text, StyleSheet, ScrollView, Image, TouchableOpacity } from 'react-native';
+import { Linking } from 'react-native';
+const sendEmail = async (email) => {
+  const url = `mailto:${email}`;
+  // Check if linking can be handled
+  const canOpen = await Linking.canOpenURL(url);
+  if (canOpen) {
+    Linking.openURL(url);
+  } else {
+    console.log('Cannot handle URL: ' + url);
+  }
+};
+const makeCall = async (phoneNumber) => {
+  const url = `tel:${phoneNumber}`;
+  // Check if linking can be handled
+  const canOpen = await Linking.canOpenURL(url);
+  if (canOpen) {
+    Linking.openURL(url);
+  } else {
+    console.log('Cannot handle URL: ' + url);
+  }
+};
+
+
 
 const ContactUsScreen = () => {
   return (
@@ -12,12 +35,34 @@ const ContactUsScreen = () => {
         />
         <Text style={styles.introText}>We're here to help and answer any questions you might have. We look forward to hearing from you!</Text>
         <View style={styles.contactMethod}>
-          <Text style={styles.methodHeader}>Email Us</Text>
-          <Text style={styles.text}>support@leafCare.com</Text>
+          <Text style={styles.methodHeader}>Report Anomaly</Text>
+          <TouchableOpacity onPress={() => sendEmail('anomaly@leafCare.com')}>
+            <Text style={styles.text}>anomaly@leafCare.com</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.contactMethod}>
+          <Text style={styles.methodHeader}>Technical Issue</Text>
+          <TouchableOpacity onPress={() => sendEmail('service@leafcare.com')}>
+            <Text style={styles.text}>service@leafcare.com</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.contactMethod}>
+          <Text style={styles.methodHeader}>Request New Feature</Text>
+          <TouchableOpacity onPress={() => sendEmail('request@leafcare.com')}>
+            <Text style={styles.text}>request@leafcare.com</Text>
+          </TouchableOpacity>
+        </View>
+        <View style={styles.contactMethod}>
+          <Text style={styles.methodHeader}>Other</Text>
+          <TouchableOpacity onPress={() => sendEmail('info@leafcare.com')}>
+            <Text style={styles.text}>info@leafcare.com</Text>
+          </TouchableOpacity>        
         </View>
         <View style={styles.contactMethod}>
           <Text style={styles.methodHeader}>Call Us</Text>
-          <Text style={styles.text}>+123 456 7890</Text>
+          <TouchableOpacity onPress={() => makeCall('+92-348-2685910')}>
+            <Text style={styles.text}>Call: +92-348-2685910</Text>
+          </TouchableOpacity>      
         </View>
       </View>
     </ScrollView>

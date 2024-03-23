@@ -25,6 +25,7 @@
     "expo-image-picker": "~14.3.2",
     "expo-permissions": "~14.2.1",
     "expo-status-bar": "~1.6.0",
+    "firebase": "^10.9.0",
     "lottie-react-native": "^6.7.0",
     "react": "18.2.0",
     "react-native": "0.72.6",
@@ -42,7 +43,10 @@
     "react-native-svg": "^13.9.0",
     "react-native-tab-view": "^3.5.2",
     "react-native-vector-icons": "^10.0.3",
-    "react-native-web": "^0.19.10"
+    "react-native-web": "^0.19.10",
+    "xed": "^0.0.2"
+    
+
   },
   "devDependencies": {
     "@babel/core": "^7.20.0",

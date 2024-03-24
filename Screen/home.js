@@ -180,6 +180,25 @@ export default HomeScreen = ({navigation}) => {
     return resizedImg.expandDims(0).toFloat().div(tf.scalar(255));
   };
 
+  function hasConsecutiveMatch(source, target, minLength = 3) {
+    let longestMatch = 0;
+
+    // Create a 2D array to hold the lengths of longest common substrings
+    const dp = Array(source.length + 1).fill(null).map(() => Array(target.length + 1).fill(0));
+
+    // Fill dp array
+    for (let i = 1; i <= source.length; i++) {
+        for (let j = 1; j <= target.length; j++) {
+            if (source[i - 1].toLowerCase() === target[j - 1].toLowerCase()) {
+                dp[i][j] = dp[i - 1][j - 1] + 1;
+                longestMatch = Math.max(longestMatch, dp[i][j]);
+            }
+        }
+    }
+
+    return longestMatch >= minLength;
+}
+
   async function showImagePickerOptions() {
     return new Promise((resolve) => {
       Alert.alert(
@@ -210,6 +229,8 @@ export default HomeScreen = ({navigation}) => {
       if (foundplant) {
         setval(foundplant.id);
       } else {
+        const result = POPULAR_PLANTS.find(p => hasConsecutiveMatch(p.name, searchQuery));
+        
         setval(0)
         console.log("No matching plant found.");
       }

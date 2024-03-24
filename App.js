@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar, StyleSheet, Text, ImageBackground } from 'react-native';
+import { StatusBar, StyleSheet, Text, ImageBackground ,Header,TouchableOpacity,View} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -16,6 +16,7 @@ import TermsAndConditionsScreen from './Screen/terms&Conditions';
 import LoginScreen from './Screen/login'
 import  RegisterScreen from "./Screen/SignUp";
 import Pophandler from './component/pophandler';
+import  CustomHeader from './component/header';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const updateStack = createStackNavigator();
@@ -23,25 +24,26 @@ const profileStack = createStackNavigator();
 // Define Home stack navigator
 const HomeStackScreen = () => (
   <HomeStack.Navigator  >
-    <HomeStack.Screen name="Home" component={HomeScreen} />
+    <HomeStack.Screen name="Home" component={HomeScreen} options={{headerShown: false}} />
     <HomeStack.Screen name="Disease Details" component={Pophandler} options={{headerShown: false}} />
   </HomeStack.Navigator>
 );
 const UpdateStackScreen = () => (
   <updateStack.Navigator  >
-    <updateStack.Screen name="Setting" component={SettingsScreen} />
-    <updateStack.Screen name="Contact us" component={ContactUsScreen} />
-    <updateStack.Screen name="FAQ" component={FAQScreen} />
-    <updateStack.Screen name="Terms and Conditions" component={TermsAndConditionsScreen} />
+    <updateStack.Screen name="Setting" component={SettingsScreen} options={{headerShown: false}}/>
+    <updateStack.Screen name="Contact us" component={ContactUsScreen} options={{headerShown: false}}/>
+    <updateStack.Screen name="FAQ" component={FAQScreen} options={{headerShown: false}}/>
+    <updateStack.Screen name="Terms and Conditions" component={TermsAndConditionsScreen} options={{headerShown: false}}/>
   </updateStack.Navigator>
 );
 const ProfileStackScreen = () => (
   <profileStack.Navigator  >
-    <profileStack.Screen name="Profile" component={ProfileScreen} />
-    <profileStack.Screen name="Login" component={LoginScreen} />
-    <profileStack.Screen name="Sign up" component={RegisterScreen} />
+    <profileStack.Screen name="Profile" component={ProfileScreen} options={{headerShown: false}}/>
+    <profileStack.Screen name="Login" component={LoginScreen} options={{headerShown: false}} />
+    <profileStack.Screen name="Sign up" component={RegisterScreen} options={{headerShown: false}} />
   </profileStack.Navigator>
 );
+
 // Define your icons and labels for the bottom tab navigator here
 const screenOptions = ({ route }) => ({
   tabBarIcon: ({ focused, color, size }) => {
@@ -60,11 +62,20 @@ const screenOptions = ({ route }) => ({
       Settings: 'Settings',
       Profilee: 'Profile',
     };
-    return <Text style={{ color: focused ? '#386641' : '#C0C0C0' }}>{focused ? labels[route.name] : ''}</Text>;
+    return <Text style={{ color: focused ? '#386641' : '#C0C0C0', alignItems:'center' }}>{focused ? labels[route.name] : ''}</Text>;
   },
   tabBarActiveTintColor: '#386641',
   tabBarInactiveTintColor: '#C0C0C0',
   tabBarStyle: styles.tabBar,
+    headerStyle: { 
+      height: 60,
+      // borderBottomLeftRadius: 50,
+      // borderBottomRightRadius: 50,
+      elevation: 25,
+      backgroundColor: '#386641',
+      shadowColor: '#000'
+    },
+
 });
 
 export default function App() {
@@ -74,13 +85,47 @@ export default function App() {
       resizeMode="cover" // or "contain" if you don't want the image to be cropped
       style={{ flex: 1 }}
     >
+     
       <NavigationContainer>
         <StatusBar style="auto" />
         <Tab.Navigator initialRouteName="HomeStackScreen" screenOptions={screenOptions}>
-          <Tab.Screen name="HomeScreen" component={HomeStackScreen} />
-          <Tab.Screen name="Updates" component={NotificationsScreen} />
-          <Tab.Screen name="Settings" component={UpdateStackScreen} />
-          <Tab.Screen name="Profilee" component={ProfileStackScreen } />
+          <Tab.Screen name="HomeScreen" component={HomeStackScreen} 
+           options={{
+              headerTitle: () => <CustomHeader title="Home" />,
+              headerLeft: () => (
+                <TouchableOpacity style={{ marginLeft: 25 }}> 
+                <MaterialCommunityIcons name='home-outline' size={28} color='white' /> 
+                </TouchableOpacity>
+                 ),
+            }} />
+          <Tab.Screen name="Updates" component={NotificationsScreen} 
+           options={{
+              headerTitle: () => <CustomHeader title="Updates" />,
+               headerLeft: () => (
+                <TouchableOpacity style={{ marginLeft: 25 }}> 
+                <MaterialCommunityIcons name='bell-outline' size={28} color='white' /> 
+                </TouchableOpacity>
+                 ),
+            }} />
+          <Tab.Screen name="Settings" component={UpdateStackScreen} 
+           options={{
+              headerTitle: () => <CustomHeader title="Settings" />,
+              headerLeft: () => (
+                <TouchableOpacity style={{ marginLeft: 25 }}> 
+                <MaterialCommunityIcons name='cog-outline' size={28} color='white' /> 
+                </TouchableOpacity>
+                 ),
+            }} />
+          <Tab.Screen name="Profilee" component={ProfileStackScreen }
+           options={{
+              headerTitle: () => <CustomHeader title="Profile" />,
+              headerLeft: () => (
+                <TouchableOpacity style={{ marginLeft: 25 }}> 
+                <MaterialCommunityIcons name='account-outline' size={28} color='white' /> 
+                </TouchableOpacity>
+                 ),
+        
+            }}  />
         </Tab.Navigator>
       </NavigationContainer>
     </ImageBackground>
@@ -148,6 +193,6 @@ const styles = StyleSheet.create({
   buttonText: {
     color: '#F9F6EE', // Contrast color for text inside button
     fontWeight: 'bold',
-  },
+  }
 });
 

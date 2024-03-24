@@ -1,7 +1,7 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-const RESULT_MAPPING = ['SCAB APPLE', 'HEALTHY', 'MULTIDISEASE', 'Cedar Apple Rust'];
+const RESULT_MAPPING = ['SCAB APPLE', 'HEALTHY', 'MULTIDISEASE', 'Cedar Apple Rust','Disease 5','Disease 6'];
 
 const Output = ({ predictions }) => {
   let content;

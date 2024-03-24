@@ -11,14 +11,14 @@ ActivityIndicator,
 TextInput, 
 Alert, 
 KeyboardAvoidingView, 
-Platform, 
+Platform,
 ImageBackground } from 'react-native';
 import Background from '../component/background'; // Import the Background component
 // Third-party imports for icons and TensorFlow.js
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import * as tf from '@tensorflow/tfjs';
 import { bundleResourceIO } from '@tensorflow/tfjs-react-native';
-
+import CaptureButton from '../component/CaptureButton';
 // Expo permissions and image picker for handling media
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
@@ -82,12 +82,13 @@ export default HomeScreen = ({navigation}) => {
         setTfReady(true);
         tf.serialization.registerClass(CustomL2Regularizer);
   
-        const modelJson = require('../models/model.json');
-        const weights = require('../models/shared.bin');
+        const modelJson = require('../models/model4.json');
+        const weights = require('../models/shared4.bin');
       
         const loadedModel = await tf.loadLayersModel(bundleResourceIO(modelJson, weights));
         setModel(loadedModel);
         setModelStatus('Model loaded successfully');
+        console.log("Model loaded successfully");
       } catch (error) {
         console.error("Error loading TensorFlow model:", error);
         setmodelerror(error.message)
@@ -174,7 +175,7 @@ export default HomeScreen = ({navigation}) => {
     }
 
     const img = tf.tensor3d(buffer, [width, height, 3]);
-    const resizedImg = tf.image.resizeBilinear(img, [128, 128]);
+    const resizedImg = tf.image.resizeBilinear(img, [224, 224]);
     return resizedImg.expandDims(0).toFloat().div(tf.scalar(255));
   };
 
@@ -202,37 +203,7 @@ export default HomeScreen = ({navigation}) => {
       );
     });
   }
-
- 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-  
-
-  
-  const handleSubmitEditing = () => {
+      const handleSubmitEditing = () => {
       const foundplant = POPULAR_PLANTS.find(p => p.name.toLowerCase() == searchQuery.toLowerCase());
       
       if (foundplant) {
@@ -285,18 +256,7 @@ export default HomeScreen = ({navigation}) => {
         </Text>
       </View>
       
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={model && !predictions && !isAnalyzing ? handleImageSelection : () => {
-          if(predictions){
-            resetState();
-          }
-        }}
-        
-      >
-        <Text style={styles.buttonText}></Text>
-        <MaterialCommunityIcons name="camera-plus" size={70} color="green" />
-      </TouchableOpacity>
+      <CaptureButton onPress={handleImageSelection} />
 
       <Output predictions={predictions} />
 
@@ -573,5 +533,29 @@ const styles = StyleSheet.create({
     color: '#000000', // white color for the text
     fontSize: 18, // larger font size for the title
     textAlign: 'center'
+  },
+  captureButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: 70, // Diameter of the outer circle
+    height: 70, // Diameter of the outer circle
+    borderRadius: 35, // Half of the width/height to make it a perfect circle
+    backgroundColor: '#4caf50', // Your primary button color
+    elevation: 4, // Shadow for Android
+    // Shadows for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  
+  captureButtonInner: {
+    width: 60, // Diameter of the inner circle
+    height: 60, // Diameter of the inner circle
+    borderRadius: 30, // Half of the width/height to make it a perfect circle
+    backgroundColor: '#388E3C', // A slightly darker shade of the button color for contrast
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

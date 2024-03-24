@@ -82,8 +82,8 @@ export default HomeScreen = ({navigation}) => {
         setTfReady(true);
         tf.serialization.registerClass(CustomL2Regularizer);
   
-        const modelJson = require('../models/model4.json');
-        const weights = require('../models/shared4.bin');
+        const modelJson = require('../models/Corn/model.json');
+        const weights = require('../models/Corn/shared.bin');
       
         const loadedModel = await tf.loadLayersModel(bundleResourceIO(modelJson, weights));
         setModel(loadedModel);
@@ -158,6 +158,7 @@ export default HomeScreen = ({navigation}) => {
       console.error("Error in handleImageSelection:", error);
       setIsAnalyzing(false);
     }
+    
   };
 
   const imageToTensor = async (source) => {
@@ -330,7 +331,7 @@ const styles = StyleSheet.create({
     //paddingVertical: 5,
   },
   identifyButton: {
-    backgroundColor: '#4caf50',
+    backgroundColor: '#023020',
     borderRadius: 50,
     padding: 15,
     flexDirection: 'row',
@@ -432,7 +433,7 @@ const styles = StyleSheet.create({
 
   cameraIcon: {
     fontSize: 60, // Large size for the camera icon
-    color: '#386641', // Icon color, you can choose any color
+    color: '#023020', // Icon color, you can choose any color
   },
   infoSection: {
     marginVertical: 20,
@@ -541,7 +542,7 @@ const styles = StyleSheet.create({
     width: 70, // Diameter of the outer circle
     height: 70, // Diameter of the outer circle
     borderRadius: 35, // Half of the width/height to make it a perfect circle
-    backgroundColor: '#4caf50', // Your primary button color
+    backgroundColor: '#023020', // Your primary button color
     elevation: 4, // Shadow for Android
     // Shadows for iOS
     shadowColor: '#000',

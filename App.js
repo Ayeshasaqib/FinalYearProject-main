@@ -1,5 +1,5 @@
 import React from 'react';
-import { StatusBar, StyleSheet, Text, ImageBackground ,Header,TouchableOpacity,View} from 'react-native';
+import { StatusBar, StyleSheet, Text, ImageBackground ,Header,TouchableOpacity,View,Platform} from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
@@ -50,42 +50,8 @@ const ProfileStackScreen = () => (
   </profileStack.Navigator>
 );
 
-// Define your icons and labels for the bottom tab navigator here
-// const screenOptions = ({ route }) => ({
-//   tabBarIcon: ({ focused, color, size }) => {
-//     const icons = {
-//       HomeScreen: focused ? 'camera' : 'camera-outline',
-//       Updates: focused ? 'bell' : 'bell-outline',
-//       Settings: focused ? 'cog' : 'cog-outline',
-//       Profilee: focused ? 'account-circle' : 'account-circle-outline',
-//     };
-//     return <MaterialCommunityIcons name={icons[route.name]} size={size} color={color} />;
-//   },
-//   tabBarLabel: ({ focused }) => {
-//     const labels = {
-//       Home: 'HomeScreen',
-//       Updates: 'Updates',
-//       Settings: 'Settings',
-//       Profilee: 'Profile',
-//     };
-//     return <Text style={{ color: focused ? '#386641' : '#C0C0C0', alignItems:'center' }}>{focused ? labels[route.name] : ''}</Text>;
-//   },
-//   tabBarActiveTintColor: '#386641',
-//   tabBarInactiveTintColor: '#C0C0C0',
-//   tabBarStyle: styles.tabBar,
-//     headerStyle: { 
-//       height: 60,
-//       // borderBottomLeftRadius: 50,
-//       // borderBottomRightRadius: 50,
-//       elevation: 25,
-//       backgroundColor: '#386641',
-//       shadowColor: '#000'
-//     },
-
-// });
 const screenOptions = {
   tabBarShowLabel: false,
-  headerShown: false,
   tabBarStyle: {
     position: 'absolute',
     bottom: 0,
@@ -94,7 +60,7 @@ const screenOptions = {
     elevation: 0,
     height: 60,
     backgroundColor: '#fff', // Corrected property name
-  },
+   },
   headerStyle: { 
     height: 100,
     borderBottomLeftRadius: 50,
@@ -131,14 +97,6 @@ export default function App() {
                 <MaterialCommunityIcons name='account-outline' size={28} color='white' /> 
                 </TouchableOpacity>
                  ),
-                 headerStyle: { 
-                   height: 100,
-                   borderBottomLeftRadius: 50,
-                   borderBottomRightRadius: 50,
-                   elevation: 25,
-                   backgroundColor: '#386641',
-                   shadowColor: '#000'
-                 },
             }}
           />
           <Tab.Screen 
@@ -157,14 +115,6 @@ export default function App() {
                <MaterialCommunityIcons name='bell-outline' size={28} color='white' /> 
                </TouchableOpacity>
                 ),
-                headerStyle: { 
-                  height: 100,
-                  borderBottomLeftRadius: 50,
-                  borderBottomRightRadius: 50,
-                  elevation: 25,
-                  backgroundColor: '#386641',
-                  shadowColor: '#000'
-                },
             }}
           />
           <Tab.Screen 
@@ -192,15 +142,6 @@ export default function App() {
                 <MaterialCommunityIcons name='home-outline' size={28} color='white' /> 
                 </TouchableOpacity>
                  ),
-                 headerStyle: { 
-                   height: 100,
-                   borderBottomLeftRadius: 50,
-                   borderBottomRightRadius: 50,
-                   elevation: 25,
-                   backgroundColor: '#386641',
-                   shadowColor: '#000',
-                   alignItems:'center'
-                 },
             }}
           />
           <Tab.Screen
@@ -219,14 +160,6 @@ export default function App() {
                 <MaterialCommunityIcons name='cog-outline' size={28} color='white' /> 
                 </TouchableOpacity>
                  ),
-                 headerStyle: { 
-                   height: 100,
-                   borderBottomLeftRadius: 50,
-                   borderBottomRightRadius: 50,
-                   elevation: 25,
-                   backgroundColor: '#386641',
-                   shadowColor: '#000'
-                 },
             }}
           />
           <Tab.Screen 
@@ -246,15 +179,6 @@ export default function App() {
                 <MaterialCommunityIcons name='account-outline' size={28} color='white' /> 
                 </TouchableOpacity>
                  ),
-                 headerStyle: { 
-                   height: 100,
-                   borderBottomLeftRadius: 50,
-                   borderBottomRightRadius: 50,
-                   elevation: 25,
-                   backgroundColor: '#386641',
-                   shadowColor: '#000'
-                 },
-        
             }}
           />
        </Tab.Navigator>

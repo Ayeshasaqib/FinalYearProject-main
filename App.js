@@ -30,23 +30,23 @@ const profileStack = createStackNavigator();
 // Define Home stack navigator
 const HomeStackScreen = () => (
   <HomeStack.Navigator  >
-    <HomeStack.Screen name="Home" component={HomeScreen} />
-    <HomeStack.Screen name="Disease Details" component={Pophandler} />
+    <HomeStack.Screen name="Home" component={HomeScreen} options={{headerShown:false}} />
+    <HomeStack.Screen name="Disease Details" component={Pophandler} options={{headerShown:false}}/>
   </HomeStack.Navigator>
 );
 const UpdateStackScreen = () => (
   <updateStack.Navigator  >
-    <updateStack.Screen name="Setting" component={SettingsScreen} />
-    <updateStack.Screen name="Contact us" component={ContactUsScreen} />
-    <updateStack.Screen name="FAQ" component={FAQScreen} />
-    <updateStack.Screen name="Terms and Conditions" component={TermsAndConditionsScreen} />
+    <updateStack.Screen name="Setting" component={SettingsScreen} options={{headerShown:false}}  />
+    <updateStack.Screen name="Contact us" component={ContactUsScreen} options={{headerShown:false}}  />
+    <updateStack.Screen name="FAQ" component={FAQScreen} options={{headerShown:false}}  />
+    <updateStack.Screen name="Terms and Conditions" component={TermsAndConditionsScreen} options={{headerShown:false}}  />
   </updateStack.Navigator>
 );
 const ProfileStackScreen = () => (
   <profileStack.Navigator  >
-    <profileStack.Screen name="Profile" component={ProfileScreen} />
-    <profileStack.Screen name="Login" component={LoginScreen} />
-    <profileStack.Screen name="Sign up" component={RegisterScreen} />
+    <profileStack.Screen name="Profile" component={ProfileScreen} options={{headerShown:false}}  />
+    <profileStack.Screen name="Login" component={LoginScreen} options={{headerShown:false}}  />
+    <profileStack.Screen name="Sign up" component={RegisterScreen} options={{headerShown:false}}  />
   </profileStack.Navigator>
 );
 
@@ -141,7 +141,7 @@ export default function App() {
                 <TouchableOpacity style={{ marginRight: 15 }}> 
                 <MaterialCommunityIcons name='home-outline' size={28} color='white' /> 
                 </TouchableOpacity>
-                 ),
+                 )
             }}
           />
           <Tab.Screen

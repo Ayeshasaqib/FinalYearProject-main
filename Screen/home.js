@@ -11,14 +11,14 @@ ActivityIndicator,
 TextInput, 
 Alert, 
 KeyboardAvoidingView, 
-Platform,
-ImageBackground } from 'react-native';
+Platform, 
+ImageBackground,FlatList } from 'react-native';
 import Background from '../component/background'; // Import the Background component
 // Third-party imports for icons and TensorFlow.js
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import * as tf from '@tensorflow/tfjs';
 import { bundleResourceIO } from '@tensorflow/tfjs-react-native';
-import CaptureButton from '../component/CaptureButton';
+
 // Expo permissions and image picker for handling media
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
@@ -73,7 +73,8 @@ export default HomeScreen = ({navigation}) => {
   const [name, setname] = useState();
   const [val, setval] = useState();
   const [isLoading, setIsLoading] = useState(true);
-
+  const [displaySuggestions, setDisplaySuggestions] = useState([]);
+  const [suggestions, setsuggestions] = useState([]);
   useEffect(() => {
     (async () => {
       setIsLoading(true); // Start loading
@@ -82,13 +83,12 @@ export default HomeScreen = ({navigation}) => {
         setTfReady(true);
         tf.serialization.registerClass(CustomL2Regularizer);
   
-        const modelJson = require('../models/Corn/model.json');
-        const weights = require('../models/Corn/shared.bin');
+        const modelJson = require('../models/model.json');
+        const weights = require('../models/shared.bin');
       
         const loadedModel = await tf.loadLayersModel(bundleResourceIO(modelJson, weights));
         setModel(loadedModel);
         setModelStatus('Model loaded successfully');
-        console.log("Model loaded successfully");
       } catch (error) {
         console.error("Error loading TensorFlow model:", error);
         setmodelerror(error.message)
@@ -113,6 +113,13 @@ export default HomeScreen = ({navigation}) => {
     setSearchQuery(''); // This will clear the input field
   }, []);
 
+  useEffect(() => {
+      const allNames = POPULAR_PLANTS.map(plant => plant.name);
+      const uniqueNames = [...new Set(allNames)]; // Convert array to set to remove duplicates
+      setsuggestions(uniqueNames);
+    }, []);
+ 
+  
   const resetState = () => {
     setImage(null);
     setPredictions(null);
@@ -158,7 +165,6 @@ export default HomeScreen = ({navigation}) => {
       console.error("Error in handleImageSelection:", error);
       setIsAnalyzing(false);
     }
-    
   };
 
   const imageToTensor = async (source) => {
@@ -176,28 +182,9 @@ export default HomeScreen = ({navigation}) => {
     }
 
     const img = tf.tensor3d(buffer, [width, height, 3]);
-    const resizedImg = tf.image.resizeBilinear(img, [224, 224]);
+    const resizedImg = tf.image.resizeBilinear(img, [128, 128]);
     return resizedImg.expandDims(0).toFloat().div(tf.scalar(255));
   };
-
-  function hasConsecutiveMatch(source, target, minLength = 3) {
-    let longestMatch = 0;
-
-    // Create a 2D array to hold the lengths of longest common substrings
-    const dp = Array(source.length + 1).fill(null).map(() => Array(target.length + 1).fill(0));
-
-    // Fill dp array
-    for (let i = 1; i <= source.length; i++) {
-        for (let j = 1; j <= target.length; j++) {
-            if (source[i - 1].toLowerCase() === target[j - 1].toLowerCase()) {
-                dp[i][j] = dp[i - 1][j - 1] + 1;
-                longestMatch = Math.max(longestMatch, dp[i][j]);
-            }
-        }
-    }
-
-    return longestMatch >= minLength;
-}
 
   async function showImagePickerOptions() {
     return new Promise((resolve) => {
@@ -222,20 +209,31 @@ export default HomeScreen = ({navigation}) => {
         { cancelable: false }
       );
     });
-  }
-      const handleSubmitEditing = () => {
+  }  
+  const handleSubmitEditing = () => {
       const foundplant = POPULAR_PLANTS.find(p => p.name.toLowerCase() == searchQuery.toLowerCase());
       
       if (foundplant) {
         setval(foundplant.id);
       } else {
-        const result = POPULAR_PLANTS.find(p => hasConsecutiveMatch(p.name, searchQuery));
-        
         setval(0)
         console.log("No matching plant found.");
       }
     };  
 
+  
+  
+  const updateSearchQuery = (input) => {
+    
+    if (input.length > 2) { // Only show suggestions if the input length is greater than 2
+      const filteredSuggestions = suggestions.filter(suggestion =>
+        suggestion.toLowerCase().includes(input.toLowerCase())
+      );
+      setDisplaySuggestions(filteredSuggestions);
+    } else {
+      setDisplaySuggestions([]);
+    }
+  };
     const renderPlantCard = (plant) => {
       return (
         <TouchableOpacity
@@ -278,29 +276,50 @@ export default HomeScreen = ({navigation}) => {
         </Text>
       </View>
       
-      <CaptureButton onPress={handleImageSelection} />
+      <TouchableOpacity 
+        style={styles.button} 
+        onPress={model && !predictions && !isAnalyzing ? handleImageSelection : () => {
+          if(predictions){
+            resetState();
+          }
+        }}
+        
+      >
+        <Text style={styles.buttonText}></Text>
+        <MaterialCommunityIcons name="camera-plus" size={70} color="green" />
+      </TouchableOpacity>
 
       <Output predictions={predictions} />
 
       <View style={styles.searchContainer}>
-          <TextInput
-          style={styles.searchInput}
-          placeholder="Search plant by name"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          onSubmitEditing={handleSubmitEditing}
-        />
-         
+           <TextInput
+            style={styles.searchInput}
+            placeholder="Search plant by name"
+            value={searchQuery}
+            onChangeText={(e) => { setSearchQuery(e); updateSearchQuery(e); }}
+            onSubmitEditing={() =>{ handleSubmitEditing}}
+          />
+        
         <TouchableOpacity 
-              onPress={()=>navigation.navigate('HomeScreen', 
-                {screen: 'Disease Details',
-                params:
-                  { val: val },} )} 
+              onPress={()=> { handleSubmitEditing; 
+              navigation.navigate('Disease Details',
+                  { val: val } )}} 
               style={styles.searchButton}>
           <MaterialIcons name="search" size={25} color="#6a994e" />
         </TouchableOpacity>
         
       </View>
+        <View style={styles.liist}>
+            <FlatList
+              data={displaySuggestions}
+              renderItem={({ item }) => (
+                <TouchableOpacity onPress={() => { setSearchQuery(item); handleSubmitEditing(); }}>
+                  <Text>{item}</Text>
+                </TouchableOpacity>
+              )}
+              keyExtractor={(item, index) => index.toString()}
+            />
+          </View>
     </ScrollView>
     </ScrollView>
     </ImageBackground>
@@ -352,7 +371,7 @@ const styles = StyleSheet.create({
     //paddingVertical: 5,
   },
   identifyButton: {
-    backgroundColor: '#023020',
+    backgroundColor: '#4caf50',
     borderRadius: 50,
     padding: 15,
     flexDirection: 'row',
@@ -376,7 +395,14 @@ const styles = StyleSheet.create({
     alignSelf: 'center', // Center the container
     width: '90%', // Increase the width to make the search box appear bigger
   },
-
+  liist:{
+    flexDirection: 'row',
+      paddingHorizontal: 20,
+      marginTop: 20, // Add margin at the top to place it below the buttons
+      alignSelf: 'center', // Center the container
+      width: '90%',
+      marginLeft:200,
+  },
   // Adjust the searchInput to fill the searchContainer
   searchInput: {
     flex: 1,
@@ -454,7 +480,7 @@ const styles = StyleSheet.create({
 
   cameraIcon: {
     fontSize: 60, // Large size for the camera icon
-    color: '#023020', // Icon color, you can choose any color
+    color: '#386641', // Icon color, you can choose any color
   },
   infoSection: {
     marginVertical: 20,
@@ -555,29 +581,5 @@ const styles = StyleSheet.create({
     color: '#000000', // white color for the text
     fontSize: 18, // larger font size for the title
     textAlign: 'center'
-  },
-  captureButton: {
-    alignItems: 'center',
-    justifyContent: 'center',
-    alignSelf: 'center',
-    width: 70, // Diameter of the outer circle
-    height: 70, // Diameter of the outer circle
-    borderRadius: 35, // Half of the width/height to make it a perfect circle
-    backgroundColor: '#023020', // Your primary button color
-    elevation: 4, // Shadow for Android
-    // Shadows for iOS
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.1,
-    shadowRadius: 2,
-  },
-  
-  captureButtonInner: {
-    width: 60, // Diameter of the inner circle
-    height: 60, // Diameter of the inner circle
-    borderRadius: 30, // Half of the width/height to make it a perfect circle
-    backgroundColor: '#388E3C', // A slightly darker shade of the button color for contrast
-    alignItems: 'center',
-    justifyContent: 'center',
   },
 });

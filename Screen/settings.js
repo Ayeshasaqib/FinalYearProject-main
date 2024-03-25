@@ -28,24 +28,20 @@ const Settings = ({navigation}) => {
       >
         <SettingsOption iconImg={require('../assets/darkmode.png')} title="Dark Mode" onPress=
               {
-                  ()=>navigation.navigate('Settings', 
-                  {screen: 'Contact us' } )
+                  ()=>navigation.navigate('Contact us')
               } />
         <SettingsOption iconImg={require('../assets/terms.png')} title="Terms and Conditions" onPress=
               {
-                ()=>navigation.navigate('Settings', 
-                {screen: 'Terms and Conditions' } )
+                ()=>navigation.navigate('Terms and Conditions')
               } />
         <SettingsOption iconImg={require('../assets/FAQ.png')} title="FAQ" onPress=
         {
-          ()=>navigation.navigate('Settings', 
-          {screen: 'FAQ' } )
+          ()=>navigation.navigate('FAQ' )
       } />
       
         <SettingsOption iconImg={require('../assets/contact.png')} title="Contact Us" onPress=
         {
-          ()=>navigation.navigate('Settings', 
-          {screen: 'Contact us' } )
+          ()=>navigation.navigate('Contact us' )
       } />
       </ScrollView>
     </ImageBackground>

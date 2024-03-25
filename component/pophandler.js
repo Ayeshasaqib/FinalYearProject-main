@@ -11,7 +11,7 @@ const Pophandler = ({ route }) => {
     { key: 'remedies', title: 'Remedies' },
   ]);
 
-  const plant = POPULAR_PLANTS.find(p => p.id === route?.params?.val);
+  const plant = POPULAR_PLANTS.find(p => p.id === route?.params?.val  ||p.name === route?.params?.searchQuery );
   if (!plant) {
     alert('Name of disease is not correct');
     return null;

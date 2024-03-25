@@ -5,7 +5,7 @@ import { useIsFocused } from '@react-navigation/native';
 const CustomHeader = ({title}) => {
   focused=useIsFocused()
    const labels = {
-      Home: 'HomeScreen',
+      Home: 'Home',
       Updates: 'Updates',
       Settings: 'Settings',
       Profilee: 'Profile',

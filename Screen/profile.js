@@ -27,16 +27,14 @@ const Profile = ({navigation}) => {
         <TouchableOpacity style={styles.actionButton} 
          onPress=
               {
-                  ()=>navigation.navigate('Profilee', 
-                  {screen: 'Login' } )
+                  ()=>navigation.navigate('Login' )
               } >
           <Text>Login </Text>
         </TouchableOpacity>
         <TouchableOpacity style={styles.actionButton} 
         onPress=
               {
-                  ()=>navigation.navigate('Profilee', 
-                  {screen: 'Sign up' } )
+                  ()=>navigation.navigate('Sign up')
               } >
           <Text>Sign up </Text>
         </TouchableOpacity>

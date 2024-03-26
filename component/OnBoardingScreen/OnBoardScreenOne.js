@@ -32,10 +32,9 @@ const OnBoardingScreenOne = ({navigation}) => {
       <Card style={styles.card}>
         <Card.Content>
           <View style={styles.contentContainer}>
-            <Text style={styles.title}>Welcome To SHIPEASE</Text>
+            <Text style={styles.title}>Welcome To Leaf Care</Text>
             <Text style={styles.content}>
-              Effortlessly book reliable mini trucks for all your logistics
-              needs with our user-friendly app
+            Revolutionizing plant health care with AI-driven disease detection for every leaf
             </Text>
           </View>
 
@@ -43,7 +42,7 @@ const OnBoardingScreenOne = ({navigation}) => {
             <Dots
               length={3}
               active={0}
-              activeColor="red"
+              activeColor="#230"
               activeDotHeight={height * 0.03} // Example of using percentage of screen height
             />
             <Button
@@ -86,8 +85,8 @@ const styles = StyleSheet.create({
       marginTop: height * 0.1, // Example of using percentage of screen height
     },
     logo: {
-      width: width * 0.8,
-      height: height * 0.3, // Example of using percentage of screen height
+      width: '200%',
+      height: '200%', // Example of using percentage of screen height
     },
     card: {
       flex: 3,
@@ -125,7 +124,7 @@ const styles = StyleSheet.create({
       marginBottom: height * 0.05, // Example of using percentage of screen height
     },
     nextButton: {
-      backgroundColor: '#FFFFFF',
+      backgroundColor: '#230',
       height: height * 0.08, // Example of using percentage of screen height
       width: width * 0.5, // Example of using percentage of screen width
       borderRadius: height * 0.04, // Example of using percentage of screen height

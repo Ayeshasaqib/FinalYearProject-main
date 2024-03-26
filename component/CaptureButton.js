@@ -49,6 +49,7 @@ const styles = StyleSheet.create({
     shadowOffset: { width: 0, height: 2 },
     shadowOpacity: 0.1,
     shadowRadius: 2,
+    margin:15,
   },
   captureButtonInner: {
     width: 60, // Adjusted to fit within the button
@@ -58,8 +59,8 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
   },
   imageIcon: {
-    width: 70, // Adjusted to fit well within the button
-    height: 70, // Adjusted to fit well within the button
+    width: 130, // Adjusted to fit well within the button
+    height: 130, // Adjusted to fit well within the button
     resizeMode: 'contain',
   },
 });

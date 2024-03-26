@@ -1,34 +1,24 @@
 import React, { useRef } from 'react';
-import { Animated, TouchableOpacity, StyleSheet } from 'react-native';
-import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
+import { Animated, TouchableOpacity, StyleSheet, Image } from 'react-native';
 
-const CaptureButton = ({ onPress }) => {
-  // Animated value for the scale of the button
+const CaptureButton = ({ onPress, imageSource }) => {
   const scaleValue = useRef(new Animated.Value(1)).current;
 
-  // Function to start the animation
   const animatePress = () => {
     Animated.sequence([
-      // Scale down animation
       Animated.timing(scaleValue, {
         toValue: 0.8,
         duration: 150,
         useNativeDriver: true,
       }),
-      // Scale back to original size
       Animated.timing(scaleValue, {
         toValue: 1,
         duration: 150,
         useNativeDriver: true,
       }),
-    ]).start(() => {
-      if (onPress) {
-        onPress(); // Call the passed onPress function after animation ends
-      }
-    });
+    ]).start(onPress); // Call onPress directly after animation
   };
 
-  // The animated style to apply to the button
   const animatedStyle = {
     transform: [{ scale: scaleValue }],
   };
@@ -37,25 +27,23 @@ const CaptureButton = ({ onPress }) => {
     <TouchableOpacity
       style={styles.captureButton}
       onPressIn={animatePress}
-      activeOpacity={1} // Disable the default opacity change on press
+      activeOpacity={1}
     >
       <Animated.View style={[styles.captureButtonInner, animatedStyle]}>
-        <MaterialCommunityIcons name="camera-plus" size={30} color="#fff" />
+        <Image source={imageSource} style={styles.imageIcon} />
       </Animated.View>
     </TouchableOpacity>
   );
 };
 
 const styles = StyleSheet.create({
-  // ... other styles ...
   captureButton: {
     alignItems: 'center',
     justifyContent: 'center',
     alignSelf: 'center',
-    width: 70,
-    height: 70,
+    width: 70, // Button size
+    height: 70, // Button size
     borderRadius: 35,
-    backgroundColor: '#4caf50',
     elevation: 4,
     shadowColor: '#000',
     shadowOffset: { width: 0, height: 2 },
@@ -63,14 +51,17 @@ const styles = StyleSheet.create({
     shadowRadius: 2,
   },
   captureButtonInner: {
-    width: 60,
-    height: 60,
+    width: 60, // Adjusted to fit within the button
+    height: 60, // Adjusted to fit within the button
     borderRadius: 30,
-    backgroundColor: '#388E3C',
     alignItems: 'center',
     justifyContent: 'center',
   },
-  // ... other styles ...
+  imageIcon: {
+    width: 70, // Adjusted to fit well within the button
+    height: 70, // Adjusted to fit well within the button
+    resizeMode: 'contain',
+  },
 });
 
 export default CaptureButton;

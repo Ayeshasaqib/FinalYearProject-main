@@ -16,6 +16,11 @@ const Notifications = () => {
         { id: 3, title: 'Fertilizer Alert', message: 'Consider fertilizing your cactus.' },
         { id: 4, title: 'Weather Warning', message: 'Upcoming cold weather may affect your plants.' },
         { id: 5, title: 'New Feature', message: 'Check out our new plant identification tool.' },
+        { id: 6, title: 'Seasonal Tips', message: 'Start preparing your plants for the spring season.' },
+        { id: 7, title: 'Pest Alert', message: 'Watch out for aphids on your roses.' },
+        { id: 8, title: 'Pruning Reminder', message: 'It\'s the perfect time to prune your fruit trees.' },
+        { id: 9, title: 'Soil Health', message: 'A guide to improving the soil quality for your plants.' },
+        { id: 10, title: 'Gardening Community', message: 'Join our forum to discuss with fellow gardening enthusiasts.' },
         // Add more notifications as needed
       ];
       setNotifications(fetchedNotifications);
@@ -53,10 +58,11 @@ const styles = StyleSheet.create({
   },
   notificationContainer: {
     padding: 10,
+    marginBottom: 48,
   },
   notificationCard: {
     backgroundColor: 'white',
-    padding: 15,
+    padding: 12,
     borderRadius: 10,
     marginBottom: 10,
     shadowColor: '#000',
@@ -68,6 +74,7 @@ const styles = StyleSheet.create({
   notificationTitle: {
     fontWeight: 'bold',
     marginBottom: 5,
+    color: '#023020'
   },
   background: {
     flex: 1,

@@ -67,7 +67,7 @@ const LoginScreen = () => {
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30, marginTop: 30 }}>
             <Text>New to the app?</Text>
             <TouchableOpacity onPress={() => { /* navigation.navigate('Register') */ }}>
-              <Text style={{ color: '#008000', fontWeight: '700', marginLeft: 5 }}>Register</Text>
+              <Text style={{ color: '#023020', fontWeight: '700', marginLeft: 5 }}>Register</Text>
             </TouchableOpacity>
           </View>
         </View>

@@ -1,15 +1,20 @@
 import React from 'react';
-import { StatusBar, StyleSheet, Text, ImageBackground ,Header,TouchableOpacity,View,Platform} from 'react-native';
+import { StatusBar, StyleSheet, Text, ImageBackground, Header, TouchableOpacity, View, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
 import { createStackNavigator } from '@react-navigation/stack';
 import MaterialCommunityIcons from 'react-native-vector-icons/MaterialCommunityIcons';
-
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import Entypo from 'react-native-vector-icons/Entypo';
 import FontAwesome from 'react-native-vector-icons/FontAwesome';
 import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
-
+//Splash Screen
+import SplashScreen from './component/SplashScreen';
+//OnBoarding
+import OnBoardingScreenOne from './component/OnBoardingScreen/OnBoardScreenOne';
+import OnBoardingScreenTwo from './component/OnBoardingScreen/OnBoardScreenTwo';
+import OnBoardingScreenThree from './component/OnBoardingScreen/OnBoardScreenThree';
 // Screens
 import ProfileScreen from './Screen/profile';
 import HomeScreen from './Screen/home';
@@ -19,36 +24,39 @@ import ContactUsScreen from './Screen/ContactUsScreen';
 import FAQScreen from './Screen/Faq';
 import TermsAndConditionsScreen from './Screen/terms&Conditions';
 import LoginScreen from './Screen/login'
-import  RegisterScreen from "./Screen/SignUp";
+import RegisterScreen from "./Screen/SignUp";
 import Pophandler from './component/pophandler';
-import  CustomHeader from './component/header';
+import CustomHeader from './component/header';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const updateStack = createStackNavigator();
 const profileStack = createStackNavigator();
-
 // Define Home stack navigator
 const HomeStackScreen = () => (
   <HomeStack.Navigator  >
-    <HomeStack.Screen name="Home" component={HomeScreen} />
-    <HomeStack.Screen name="Disease Details" component={Pophandler} />
+    <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+    <HomeStack.Screen name="Disease Details" component={Pophandler} options={{ headerShown: false }} />
   </HomeStack.Navigator>
 );
 const UpdateStackScreen = () => (
   <updateStack.Navigator  >
-    <updateStack.Screen name="Setting" component={SettingsScreen} />
-    <updateStack.Screen name="Contact us" component={ContactUsScreen} />
-    <updateStack.Screen name="FAQ" component={FAQScreen} />
-    <updateStack.Screen name="Terms and Conditions" component={TermsAndConditionsScreen} />
+    <updateStack.Screen name="Setting" component={SettingsScreen} options={{ headerShown: false }} />
+    <updateStack.Screen name="Contact us" component={ContactUsScreen} options={{ headerShown: false }} />
+    <updateStack.Screen name="FAQ" component={FAQScreen} options={{ headerShown: false }} />
+    <updateStack.Screen name="Terms and Conditions" component={TermsAndConditionsScreen} options={{ headerShown: false }} />
   </updateStack.Navigator>
 );
 const ProfileStackScreen = () => (
   <profileStack.Navigator  >
-    <profileStack.Screen name="Profile" component={ProfileScreen} />
-    <profileStack.Screen name="Login" component={LoginScreen} />
-    <profileStack.Screen name="Sign up" component={RegisterScreen} />
+    <profileStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+    <profileStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+    <profileStack.Screen name="Sign up" component={RegisterScreen} options={{ headerShown: false }} />
   </profileStack.Navigator>
 );
+const Stack = createNativeStackNavigator();
+
+
+
 
 const screenOptions = {
   tabBarShowLabel: false,
@@ -60,130 +68,140 @@ const screenOptions = {
     elevation: 0,
     height: 60,
     backgroundColor: '#fff', // Corrected property name
-   },
-  headerStyle: { 
-    height: 100,
+  },
+  headerStyle: {
+    height: 90,
     borderBottomLeftRadius: 50,
     borderBottomRightRadius: 50,
     elevation: 25,
-    backgroundColor: '#386641',
+    backgroundColor: '#023020',
     shadowColor: '#000',
   },
 };
 export default function App() {
   return (
-    <ImageBackground
-      source={require('./assets/background.jpg')} // Make sure this path is correct for your image
-      resizeMode="cover" // or "contain" if you don't want the image to be cropped
-      style={{ flex: 1 }}
-    >
-     
-     <NavigationContainer>
-        <StatusBar style="auto" />
-        <Tab.Navigator initialRouteName="HomeStackScreen" screenOptions={screenOptions}>
-          <Tab.Screen 
-            name="Support" 
-            component={ContactUsScreen} 
-            options={{
-              tabBarIcon: ({focused}) => (
-                <View style={{ alignItems: "center", justifyContent: "center" }}> 
-                  <Entypo name="paper-plane" size={24} color={focused ? "#023020" : "#111"} />
-                  <Text style={{ fontSize: 12, color: "#023020" }}>Updates</Text>
-                </View>
-              ),
-              headerTitle: () => <CustomHeader title="Support" />,
-              headerRight: () => (
-                <TouchableOpacity style={{ marginRight: 15 }}> 
-                <MaterialCommunityIcons name='account-outline' size={28} color='white' /> 
-                </TouchableOpacity>
-                 ),
-            }}
+    <NavigationContainer>
+      {/* <Stack.Navigator>
+        <Stack.Group screenOptions={{ headerShown: false }}>
+          <Stack.Screen name="SplashScreen" component={SplashScreen} />
+          <Stack.Screen
+            name="OnBoardingScreenOne"
+            component={OnBoardingScreenOne}
           />
-          <Tab.Screen 
-            name="Updates" 
-            component={NotificationsScreen} 
-            options={{
-              tabBarIcon: ({focused}) => (
-                <View style={{ alignItems: "center", justifyContent: "center" }}> 
-                  <Entypo name="list" size={24} color={focused ? "#023020" : "#111"} />
-                  <Text style={{ fontSize: 12, color: "#023020" }}>Updates</Text>
-                </View>
-              ),
-              headerTitle: () => <CustomHeader title="Updates" />,
-              headerRight: () => (
-               <TouchableOpacity style={{ marginRight: 15 }}> 
-               <MaterialCommunityIcons name='bell-outline' size={28} color='white' /> 
-               </TouchableOpacity>
-                ),
-            }}
+          <Stack.Screen
+            name="OnBoardingScreenTwo"
+            component={OnBoardingScreenTwo}
           />
-          <Tab.Screen 
-            name="Home" 
-            component={HomeStackScreen} 
-            options={{
-              tabBarIcon: ({focused}) => (
-                <View style={{
-                  alignItems: "center",
-                  justifyContent: "center",
-                  backgroundColor: "#023020",
-                  width: Platform.OS === "ios" ? 70 : 60,
-                  height: Platform.OS === "ios" ? 70 : 60,
-                  top: Platform.OS === "ios" ? -6 : -20,
-                  borderRadius: Platform.OS === "ios" ? 35 : 30,
-                  borderWidth: 2,
-                  borderColor: "#ffffff"
-                }}>
-                  <FontAwesome name="search" size={24} color="#fff" />
-                </View>
-              ),
-              headerTitle: () => <CustomHeader title="Home" />,
-              headerRight: () => (
-                <TouchableOpacity style={{ marginRight: 15 }}> 
-                <MaterialCommunityIcons name='home-outline' size={28} color='white' /> 
-                </TouchableOpacity>
-                 ),
-            }}
+          <Stack.Screen
+            name="OnBoardingScreenThree"
+            component={OnBoardingScreenThree}
           />
-          <Tab.Screen
-            name="Setting" 
-            component={UpdateStackScreen}
-            options={{
-              tabBarIcon: ({focused}) => (
-                <View style={{ alignItems: "center", justifyContent: "center" }}> 
-                  <MaterialIcons name="settings" size={24} color={focused ? "#023020" : "#111"} />
-                  <Text style={{ fontSize: 12, color: "#023020" }}>Setting</Text>
-                </View>
-              ),
-              headerTitle: () => <CustomHeader title="Settings" />,
-              headerRight: () => (
-                <TouchableOpacity style={{ marginRight: 15 }}> 
-                <MaterialCommunityIcons name='cog-outline' size={28} color='white' /> 
-                </TouchableOpacity>
-                 ),
-            }}
-          />
-          <Tab.Screen 
-            name="Profile" 
-            component={ProfileStackScreen} 
-            options={{
-              tabBarIcon: ({focused}) => (
-                <View style={{ alignItems: "center", justifyContent: "center" }}> 
-                  <Ionicons
-                      name="person" size={24} color={focused ? "#023020	" : "#111"} />
-                  <Text style={{ fontSize: 12, color: "#023020" }}>Profile</Text>
-                </View>
-              ),
-              headerTitle: () => <CustomHeader title="Profile" />,
-              headerRight: () => (
-                <TouchableOpacity style={{ marginRight: 15 }}> 
-                <MaterialCommunityIcons name='account-outline' size={28} color='white' /> 
-                </TouchableOpacity>
-                 ),
-            }}
-          />
-       </Tab.Navigator>
-     </NavigationContainer>
-    </ImageBackground>
+        </Stack.Group>
+      </Stack.Navigator>
+       */}
+      <StatusBar style="auto" />
+      <Tab.Navigator initialRouteName="HomeStackScreen" screenOptions={screenOptions}>
+        <Tab.Screen
+          name="Support"
+          component={ContactUsScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                <Entypo name="paper-plane" size={24} color={focused ? "#023020" : "#111"} />
+                <Text style={{ fontSize: 12, color: "#023020" }}>Support</Text>
+              </View>
+            ),
+            headerTitle: () => <CustomHeader title="Support" />,
+            headerRight: () => (
+              <TouchableOpacity style={{ marginRight: 15 }}>
+                <Entypo name="paper-plane" size={28} color='white' />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Updates"
+          component={NotificationsScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                <Entypo name="list" size={24} color={focused ? "#023020" : "#111"} />
+                <Text style={{ fontSize: 12, color: "#023020" }}>Updates</Text>
+              </View>
+            ),
+            headerTitle: () => <CustomHeader title="Updates" />,
+            headerRight: () => (
+              <TouchableOpacity style={{ marginRight: 15 }}>
+                <Entypo name="list" size={28} color='white' />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Home"
+          component={HomeStackScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <View style={{
+                alignItems: "center",
+                justifyContent: "center",
+                backgroundColor: "#023020",
+                width: Platform.OS === "ios" ? 70 : 60,
+                height: Platform.OS === "ios" ? 70 : 60,
+                top: Platform.OS === "ios" ? -6 : -20,
+                borderRadius: Platform.OS === "ios" ? 35 : 30,
+                borderWidth: 2,
+                borderColor: "#ffffff"
+              }}>
+                <Entypo name="leaf" size={24} color="#fff" />
+              </View>
+            ),
+            headerTitle: () => <CustomHeader title="Home" />,
+            headerRight: () => (
+              <TouchableOpacity style={{ marginRight: 15 }}>
+                <Entypo name="leaf" size={24} color="#fff" />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Setting"
+          component={UpdateStackScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                <MaterialIcons name="settings" size={24} color={focused ? "#023020" : "#111"} />
+                <Text style={{ fontSize: 12, color: "#023020" }}>Setting</Text>
+              </View>
+            ),
+            headerTitle: () => <CustomHeader title="Settings" />,
+            headerRight: () => (
+              <TouchableOpacity style={{ marginRight: 15 }}>
+                <MaterialCommunityIcons name='cog-outline' size={28} color='white' />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+        <Tab.Screen
+          name="Profile"
+          component={ProfileStackScreen}
+          options={{
+            tabBarIcon: ({ focused }) => (
+              <View style={{ alignItems: "center", justifyContent: "center" }}>
+                <Ionicons name="person" size={24} color={focused ? "#023020	" : "#111"} />
+                <Text style={{ fontSize: 12, color: "#023020" }}>Profile</Text>
+              </View>
+            ),
+            headerTitle: () => <CustomHeader title="Profile" />,
+            headerRight: () => (
+              <TouchableOpacity style={{ marginRight: 15 }}>
+                <Ionicons name="person" size={26} color='white' />
+              </TouchableOpacity>
+            ),
+          }}
+        />
+      </Tab.Navigator>
+    </NavigationContainer>
   );
 }
 
@@ -192,7 +210,7 @@ const styles = StyleSheet.create({
     backgroundColor: 'transparent',
     zIndex: 10,
   },
- 
+
   roundedImage: {
     borderBottomLeftRadius: 20, // Adjust the radius to suit your design
     borderBottomRightRadius: 20, // Adjust the radius to suit your design
@@ -200,10 +218,10 @@ const styles = StyleSheet.create({
     overflow: 'hidden',
     width: '100%', // Adjust as needed
     height: 200, // Adjust as needed
- 
+
   },
   text: {
-    
+
     fontSize: 24,
     position: 'absolute',
   },

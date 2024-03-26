@@ -29,7 +29,7 @@ const TermsAndConditionsScreen = () => {
       <Text style={styles.sectionTitle}>4. Privacy Policy</Text>
       <Text style={styles.paragraph}>
       Your use of the app is also subject to our Privacy Policy, which informs users about our data collection practices. Please review our Privacy Policy, which also governs your visit to our app, to understand our practices.      </Text>
-      <Text style={styles.sectionTitle}>9. Contact Us</Text>
+      <Text style={styles.sectionTitle}>5. Contact Us</Text>
       <Text style={styles.paragraph}>
         If you have any questions about these Terms, please contact us at support@leafcaredetection.com.
       </Text>
@@ -40,8 +40,10 @@ const TermsAndConditionsScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
+    paddingTop: 10,
     paddingLeft: 10,
     backgroundColor: '#f0f0f0', // Light grey background for contrast
+    marginBottom: 75,
   },
   lastUpdated: {
     fontSize: 14,
@@ -52,7 +54,7 @@ const styles = StyleSheet.create({
   sectionTitle: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#386641',
+    color: '#023020',
     marginTop: 15,
     marginBottom: 5,
   },

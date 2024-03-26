@@ -64,11 +64,12 @@ const FAQScreen = () => {
       flex: 1,
       padding: 20,
       backgroundColor: '#f0f0f0', // Optional: Changes the background color of the whole screen for contrast
+      marginBottom: 75,
     },
     header: {
       fontSize: 24, // Slightly larger for emphasis
       fontWeight: 'bold',
-      color: '#386642',
+      color: '#023020',
       marginBottom: 30, // Increased spacing from the header to the first question
       textAlign: 'center'
     },

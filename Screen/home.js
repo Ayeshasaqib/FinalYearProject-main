@@ -11,14 +11,14 @@ ActivityIndicator,
 TextInput, 
 Alert, 
 KeyboardAvoidingView, 
-Platform, 
-ImageBackground,FlatList } from 'react-native';
+Platform,
+ImageBackground } from 'react-native';
 import Background from '../component/background'; // Import the Background component
 // Third-party imports for icons and TensorFlow.js
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
 import * as tf from '@tensorflow/tfjs';
 import { bundleResourceIO } from '@tensorflow/tfjs-react-native';
-
+import CaptureButton from '../component/CaptureButton';
 // Expo permissions and image picker for handling media
 import * as Permissions from 'expo-permissions';
 import * as ImagePicker from 'expo-image-picker';
@@ -63,42 +63,121 @@ export default HomeScreen = ({navigation}) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [image, setImage] = useState(null);
   const [isTfReady, setTfReady] = useState(false);
-  const [model, setModel] = useState(null);
+  //Models
+  const [LeafTypemodel, setLeafTypemodel] = useState(null);
+  const [AppleModel,setAppleModel] = useState(null);
+  const [CornModel,setCornModel] = useState(null);
+  const [CitrusModel,setCitrusModel] = useState(null);
+  const [TomatoModel,setTomatoModel] = useState(null);
+  const [BananaModel,setBananaModel] = useState(null);
+
+  const [leafType, setLeafType] = useState('');
+  const [disease, setDisease] = useState('');
+  
   const [predictions, setPredictions] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
-  const [modelStatus, setModelStatus] = useState('Loading TensorFlow model...');
-  const [modelerror, setmodelerror] = useState("NULL")
-  const [selectedPlant, setSelectedPlant] = useState(false);
-  const [pop, setpop] = useState(false);
   const [name, setname] = useState();
   const [val, setval] = useState();
   const [isLoading, setIsLoading] = useState(true);
-  const [displaySuggestions, setDisplaySuggestions] = useState([]);
-  const [suggestions, setsuggestions] = useState([]);
-  useEffect(() => {
-    (async () => {
-      setIsLoading(true); // Start loading
-      try {
-        await tf.ready();
-        setTfReady(true);
-        tf.serialization.registerClass(CustomL2Regularizer);
+
+  //   (async () => {
+  //     setIsLoading(true); // Start loading
+  //     try {
+  //       await tf.ready();
+  //       setTfReady(true);
+  //       tf.serialization.registerClass(CustomL2Regularizer);
   
-        const modelJson = require('../models/model.json');
-        const weights = require('../models/shared.bin');
-      
-        const loadedModel = await tf.loadLayersModel(bundleResourceIO(modelJson, weights));
-        setModel(loadedModel);
-        setModelStatus('Model loaded successfully');
-      } catch (error) {
-        console.error("Error loading TensorFlow model:", error);
-        setmodelerror(error.message)
-        setModelStatus('Failed to load model');
-      }
-      setIsLoading(false); // End loading once everything is done
-      await getPermissionAsync(); // Assume this is an async operation
-    })();
-  }, []);
-  
+  //       const modelJson = require('../models/LeafType/model.json');
+  //       const weights = require('../models/LeafType/shared.bin');
+  //       const loadedModel = await tf.loadLayersModel(bundleResourceIO(modelJson, weights));
+  //       setLeafTypemodel(loadedModel);
+  //       console.log(" Leaf Type Model loaded successfully");
+  //       loadedModel.dispose();
+  //       const appleModelJson = require('../models/Apple/model.json');
+  //       const appleWeights = require('../models/Apple/weights.bin');
+  //       const appleModel = await tf.loadLayersModel(bundleResourceIO(appleModelJson, appleWeights));
+  //       setAppleModel(appleModel);
+  //       console.log("Apple Type Model loaded successfully");
+  //       appleModel.dispose();
+  //       const cornModelJson = require('../models/Apple/model.json');
+  //       const cornWeights = require('../models/Apple/weights.bin');
+  //       const cornModel = await tf.loadLayersModel(bundleResourceIO(appleModelJson, appleWeights));
+  //       setCornModel(cornModel);
+  //       console.log("Corn Type Model loaded successfully");
+
+  //       const CitrusModelJson = require('../models/Apple/model.json');
+  //       const CitrusWeights = require('../models/Apple/weights.bin');
+  //       const CitrusModel = await tf.loadLayersModel(bundleResourceIO(appleModelJson, appleWeights));
+  //       setCitrusModel(CitrusModelModel);
+  //       console.log("Citrus Type Model loaded successfully");
+
+  //       const TomatoModelJson = require('../models/Apple/model.json');
+  //       const TomatoWeights = require('../models/Apple/weights.bin');
+  //       const TomatoModel = await tf.loadLayersModel(bundleResourceIO(appleModelJson, appleWeights));
+  //       setTomatoModel(TomatoModelModel);
+  //       console.log("Tomato Type Model loaded successfully");
+
+        
+  //     } catch (error) {
+  //       console.error("Error loading TensorFlow model:", error);
+  //     }
+  //     setIsLoading(false); // End loading once everything is done
+  //     await getPermissionAsync(); // Assume this is an async operation
+  //   })();
+  // }, []);
+
+
+const loadModel = async (modelJson, modelWeights) => {
+  await tf.ready(); // Ensure TensorFlow.js is ready
+  tf.serialization.registerClass(CustomL2Regularizer);
+
+  const model = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeights));
+  console.log('Model loaded successfully');
+  return model; // Return the loaded model
+};
+const loadModelsSequentially = async () => {
+
+  // Assuming modelJson1, weights1, modelJson2, weights2 are imported or defined elsewhere
+  const model1 = await loadModel(require('../models/LeafType/model.json'), require('../models/LeafType/shared.bin'));
+  // Use model1 as needed
+  setLeafTypemodel(model1)
+  const model2 = await loadModel(require('../models/Apple/model.json'), require('../models/Apple//shared.bin'));
+  setAppleModel(model2)
+  const model3 = await loadModel(require('../models/Citrus/model.json'), require('../models/Citrus//shared.bin'));
+  setCitrusModel(model3);
+  const model4 = await loadModel(require('../models/Corn/model.json'), require('../models/Corn//shared.bin'));
+  setCornModel(model4);
+  const model5 = await loadModel(require('../models/Tomato/model.json'), require('../models/Tomato//shared.bin'));
+  setTomatoModel(model5)
+  const model6 = await loadModel(require('../models/Banana/model.json'), require('../models/Banana//shared.bin'));
+  setBananaModel(model6)
+  // Use model2 as needed
+};
+
+useEffect(() => {
+  loadModelsSequentially()
+    .then(() => console.log('All models loaded successfully'))
+    .catch(error => console.error('Model loading error:', error));
+}, []);
+
+   const imageToTensor = async (source) => {
+    const response = await fetch(source.uri, {}, { isBinary: true });
+    const rawImageData = await response.arrayBuffer();
+    const { width, height, data } = jpeg.decode(rawImageData, { useTArray: true });
+
+    const buffer = new Uint8Array(width * height * 3);
+    let offset = 0;
+    for (let i = 0; i < buffer.length; i += 3) {
+      buffer[i] = data[offset];
+      buffer[i + 1] = data[offset + 1];
+      buffer[i + 2] = data[offset + 2];
+      offset += 4;
+    }
+
+    const img = tf.tensor3d(buffer, [width, height, 3]);
+    const resizedImg = tf.image.resizeBilinear(img, [224, 224]);
+    return resizedImg.expandDims(0).toFloat().div(tf.scalar(255));
+  };
   useEffect(() => {
     (async () => {
       const mediaLibraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -113,19 +192,63 @@ export default HomeScreen = ({navigation}) => {
     setSearchQuery(''); // This will clear the input field
   }, []);
 
-  useEffect(() => {
-      const allNames = POPULAR_PLANTS.map(plant => plant.name);
-      const uniqueNames = [...new Set(allNames)]; // Convert array to set to remove duplicates
-      setsuggestions(uniqueNames);
-    }, []);
- 
-  
   const resetState = () => {
     setImage(null);
     setPredictions(null);
     setIsAnalyzing(false);
   };
+  const determineDisease = (diseaseIndex, leafTypeIndex) => {
+    if (leafTypeIndex === 0) { // Assuming 0 is Apple
+      switch (diseaseIndex) {
+        case 0: return 'Healthy Apple';
+        case 1: return 'General Scab';
+        case 2: return 'Serious Scab';
+        case 3: return 'Grey Spot';
+        case 4: return 'General Cedar Rust';
+        case 5: return 'Serious Cedar Rust';
+        default: return 'Unknown Disease';
+      }
+    } else if (leafTypeIndex === 1) { // Placeholder for another type, specifics not provided
+      switch (diseaseIndex) {
+        case 0: return 'Cordana';
+        case 1: return 'Pestalotiopsis';
+        case 2: return 'Healthy';
+        case 3: return 'Sigatoka';
+        default: return 'Unknown Disease';
+      }
+    } else if (leafTypeIndex === 2) {
+      switch (diseaseIndex) {
+        case 0: return 'Black Spot';
+        case 1: return 'Canker';
+        case 2: return 'Greening';
+        case 3: return 'Healthy';
+        default: return 'Unknown Disease';
+      }
+    } else if (leafTypeIndex === 3) {
+      switch (diseaseIndex) {
+        case 0: return 'Blight Disease';
+        case 1: return 'Grey Leaf Spot';
+        case 2: return 'Healthy';
+        case 3: return 'Common Rust';
+        default: return 'Unknown Disease';
+      }
+    } else if (leafTypeIndex === 4) {
+      switch (diseaseIndex) {
+        case 0: return 'Early Blight Disease';
+        case 1: return 'Healthy';
+        case 2: return 'Late Blight';
+        case 3: return 'Leaf Mold';
+        case 4: return 'Mosaic Virus';
+        case 5: return 'Septoria Leaf Spot';
+        case 6: return 'Spider Mites';
+        case 7: return 'Target Spot';
+        case 8: return 'Yellow Leaf Curl Virus';
+        default: return 'Unknown Disease';
+      }
+    }
   
+    return 'Leaf Type not recognized';
+  };
   const handleImageSelection = async () => {
     try {
       const cameraPermissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -150,41 +273,69 @@ export default HomeScreen = ({navigation}) => {
         });
       }
 
-      if (!response.cancelled) {
-        const source = { uri: response.uri };
-        setImage(source.uri);
-        const imageTensor = await imageToTensor(source);
-        const predictionTensor = await model.predict(imageTensor);
-
-        const predictionArray = await predictionTensor.data();
-        setPredictions(predictionArray);
-        console.log(predictionArray)
-        setIsAnalyzing(false);
-      }
+        // Convert image to tensor
+        const imageTensor = await imageToTensor(response);
+        
+        // Predict leaf type
+        const leafTypePrediction = await LeafTypemodel.predict(imageTensor);
+        console.log("leafTypePrediction Result")
+        console.log(leafTypePrediction.data())
+        const leafTypeIndex = leafTypePrediction.argMax(-1).dataSync()[0]; // Assuming the model outputs probabilities for each class
+        
+        // Based on the index, decide which model to use for further prediction
+        switch(leafTypeIndex) {
+          case 0: // Apple
+            handleSpecificDiseasePrediction(leafTypeIndex,imageTensor, AppleModel);
+            setLeafType("Apple")
+            break;
+          case 1:
+            handleSpecificDiseasePrediction(leafTypeIndex,imageTensor, AppleModel);
+            setLeafType("Banana")
+            break;
+          case 2:
+            handleSpecificDiseasePrediction(leafTypeIndex,imageTensor, CitrusModel);
+            setLeafType("Citrus")
+            break;
+          case 3:
+            handleSpecificDiseasePrediction(leafTypeIndex,imageTensor, CornModel);
+            setLeafType("Corn")
+            break;
+          case 4:
+            handleSpecificDiseasePrediction(leafTypeIndex,imageTensor, TomatoModel);
+            setLeafType("Tomato")
+            break;
+          default:
+            console.log("Leaf type not recognized.");
+        }
+        
     } catch (error) {
       console.error("Error in handleImageSelection:", error);
       setIsAnalyzing(false);
     }
+    
   };
 
-  const imageToTensor = async (source) => {
-    const response = await fetch(source.uri, {}, { isBinary: true });
-    const rawImageData = await response.arrayBuffer();
-    const { width, height, data } = jpeg.decode(rawImageData, { useTArray: true });
+  
+  
+  const handleSpecificDiseasePrediction = async (leafTypeIndex,imageTensor, model) => {
+    const diseasePrediction = await model.predict(imageTensor).data();
+    console.log("diseasePrediction");
+    console.log(diseasePrediction);
+    const diseaseIndex = diseasePrediction.indexOf(Math.max(...diseasePrediction));
+    console.log("diseaseIndex")
+    console.log(diseaseIndex)
+    setDisease(determineDisease(diseaseIndex, leafTypeIndex)); // Implement this function based on your model output    console.log(predictionArray);
+    console.log("Disease")
+    console.log(disease)
+    setPredictions({
+      leafType: leafType, // The detected type of the leaf
+      disease: disease,   // The detected disease
+    });
+    
+  
+  }
 
-    const buffer = new Uint8Array(width * height * 3);
-    let offset = 0;
-    for (let i = 0; i < buffer.length; i += 3) {
-      buffer[i] = data[offset];
-      buffer[i + 1] = data[offset + 1];
-      buffer[i + 2] = data[offset + 2];
-      offset += 4;
-    }
-
-    const img = tf.tensor3d(buffer, [width, height, 3]);
-    const resizedImg = tf.image.resizeBilinear(img, [128, 128]);
-    return resizedImg.expandDims(0).toFloat().div(tf.scalar(255));
-  };
+ 
 
   async function showImagePickerOptions() {
     return new Promise((resolve) => {
@@ -209,51 +360,37 @@ export default HomeScreen = ({navigation}) => {
         { cancelable: false }
       );
     });
-  }  
+  }
   const handleSubmitEditing = () => {
-      const foundplant = POPULAR_PLANTS.find(p => p.name.toLowerCase() == searchQuery.toLowerCase());
-      
-      if (foundplant) {
-        setval(foundplant.id);
-      } else {
-        setval(0)
-        console.log("No matching plant found.");
-      }
-    };  
-
-  
-  
-  const updateSearchQuery = (input) => {
+    const foundplant = POPULAR_PLANTS.find(p => p.name.toLowerCase() == searchQuery.toLowerCase());
     
-    if (input.length > 2) { // Only show suggestions if the input length is greater than 2
-      const filteredSuggestions = suggestions.filter(suggestion =>
-        suggestion.toLowerCase().includes(input.toLowerCase())
-      );
-      setDisplaySuggestions(filteredSuggestions);
+    if (foundplant) {
+      setval(foundplant.id);
     } else {
-      setDisplaySuggestions([]);
+      setval(0)
+      console.log("No matching plant found.");
     }
+  };  
+
+  const renderPlantCard = (plant) => {
+    return (
+      <TouchableOpacity
+        key={plant.id}
+        onPress={() => navigation.navigate('Disease Details', { val: plant.id })}
+        style={styles.cardContainer}
+      >
+        <ImageBackground source={plant.imageUri} style={styles.cardImage} imageStyle={styles.cardImageInner}>
+          <View style={styles.cardOverlay}>
+            <Text style={styles.cardTitle}>{plant.name}</Text>
+            {/* You can add more details or actions here */}
+          </View>
+        </ImageBackground>
+      </TouchableOpacity>
+    );
   };
-    const renderPlantCard = (plant) => {
-      return (
-        <TouchableOpacity
-          key={plant.id}
-          onPress={() => navigation.navigate('Disease Details', { val: plant.id })}
-          style={styles.cardContainer}
-        >
-          <ImageBackground source={plant.imageUri} style={styles.cardImage} imageStyle={styles.cardImageInner}>
-            <View style={styles.cardOverlay}>
-              <Text style={styles.cardTitle}>{plant.name}</Text>
-              {/* You can add more details or actions here */}
-            </View>
-          </ImageBackground>
-        </TouchableOpacity>
-      );
-    };
-  return (
+  
     
-    isLoading ? 
-    <LoadingScreen/> :
+  return (
     <KeyboardAvoidingView 
       style={styles.container} 
       behavior={Platform.OS === "ios" ? "padding" : "height"} 
@@ -276,50 +413,29 @@ export default HomeScreen = ({navigation}) => {
         </Text>
       </View>
       
-      <TouchableOpacity 
-        style={styles.button} 
-        onPress={model && !predictions && !isAnalyzing ? handleImageSelection : () => {
-          if(predictions){
-            resetState();
-          }
-        }}
-        
-      >
-        <Text style={styles.buttonText}></Text>
-        <MaterialCommunityIcons name="camera-plus" size={70} color="green" />
-      </TouchableOpacity>
+      <CaptureButton onPress={handleImageSelection} imageSource={require('../assets/Leafbutton.png')} />
 
       <Output predictions={predictions} />
 
       <View style={styles.searchContainer}>
-           <TextInput
-            style={styles.searchInput}
-            placeholder="Search plant by name"
-            value={searchQuery}
-            onChangeText={(e) => { setSearchQuery(e); updateSearchQuery(e); }}
-            onSubmitEditing={() =>{ handleSubmitEditing}}
-          />
-        
+          <TextInput
+          style={styles.searchInput}
+          placeholder="Search plant by name"
+          value={searchQuery}
+          onChangeText={setSearchQuery}
+          onSubmitEditing={handleSubmitEditing}
+        />
+         
         <TouchableOpacity 
-              onPress={()=> { handleSubmitEditing; 
-              navigation.navigate('Disease Details',
-                  { val: val } )}} 
+              onPress={()=>navigation.navigate('HomeScreen', 
+                {screen: 'Disease Details',
+                params:
+                  { val: val },} )} 
               style={styles.searchButton}>
-          <MaterialIcons name="search" size={25} color="#6a994e" />
+          <MaterialIcons name="search" size={25} color="#FFFFFF" />
         </TouchableOpacity>
         
       </View>
-        <View style={styles.liist}>
-            <FlatList
-              data={displaySuggestions}
-              renderItem={({ item }) => (
-                <TouchableOpacity onPress={() => { setSearchQuery(item); handleSubmitEditing(); }}>
-                  <Text>{item}</Text>
-                </TouchableOpacity>
-              )}
-              keyExtractor={(item, index) => index.toString()}
-            />
-          </View>
     </ScrollView>
     </ScrollView>
     </ImageBackground>
@@ -327,7 +443,7 @@ export default HomeScreen = ({navigation}) => {
     </KeyboardAvoidingView>
     //</Background>
   );
-};
+  }
     
 
 
@@ -371,7 +487,7 @@ const styles = StyleSheet.create({
     //paddingVertical: 5,
   },
   identifyButton: {
-    backgroundColor: '#4caf50',
+    backgroundColor: '#023020',
     borderRadius: 50,
     padding: 15,
     flexDirection: 'row',
@@ -395,14 +511,7 @@ const styles = StyleSheet.create({
     alignSelf: 'center', // Center the container
     width: '90%', // Increase the width to make the search box appear bigger
   },
-  liist:{
-    flexDirection: 'row',
-      paddingHorizontal: 20,
-      marginTop: 20, // Add margin at the top to place it below the buttons
-      alignSelf: 'center', // Center the container
-      width: '90%',
-      marginLeft:200,
-  },
+
   // Adjust the searchInput to fill the searchContainer
   searchInput: {
     flex: 1,
@@ -419,7 +528,7 @@ const styles = StyleSheet.create({
     marginLeft: 10,
     justifyContent: 'center',
     padding: 15,
-    backgroundColor: '#d9ed92',
+    backgroundColor: '#023020',
     borderRadius: 25, // Make it circular
     elevation: 2, // Optional for shadow on Android
     // Add shadow for iOS
@@ -442,7 +551,7 @@ const styles = StyleSheet.create({
   headerText: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: '#386641',
+    color: '#023020',
     marginTop: 30,
     marginBottom: 10,
     textAlign: 'center',
@@ -450,7 +559,7 @@ const styles = StyleSheet.create({
   tagline: {
     fontSize: 18,
     fontStyle: 'italic',
-    color: '#6a994e',
+    color: '#023020',
     marginBottom: 20,
     textAlign: 'center',
   },
@@ -480,12 +589,12 @@ const styles = StyleSheet.create({
 
   cameraIcon: {
     fontSize: 60, // Large size for the camera icon
-    color: '#386641', // Icon color, you can choose any color
+    color: '#023020', // Icon color, you can choose any color
   },
   infoSection: {
     marginVertical: 20,
     padding: 15,
-    backgroundColor: '#a7c957',
+    backgroundColor: '#023020',
     borderRadius: 20,
     marginHorizontal: 20,
   },
@@ -562,8 +671,8 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.3,
     shadowRadius: 5,
     elevation: 8, // shadow for Android
-    borderColor: '#FFFFFF',
-    borderWidth:2,
+    borderColor: '#023020',
+    borderWidth:1,
   },
   cardImage: {
     flex: 1, // image will fill the container
@@ -575,11 +684,36 @@ const styles = StyleSheet.create({
   cardOverlay: {
     backgroundColor: '#FFFFFF', // semi-transparent overlay for text readability
     padding: 10, // padding inside the overlay
+    color: '#023020'
   },
   cardTitle: {
     fontWeight: 'bold',
-    color: '#000000', // white color for the text
+    color: '#023020', // white color for the text
     fontSize: 18, // larger font size for the title
     textAlign: 'center'
+  },
+  captureButton: {
+    alignItems: 'center',
+    justifyContent: 'center',
+    alignSelf: 'center',
+    width: 70, // Diameter of the outer circle
+    height: 70, // Diameter of the outer circle
+    borderRadius: 35, // Half of the width/height to make it a perfect circle
+    backgroundColor: '#023020', // Your primary button color
+    elevation: 4, // Shadow for Android
+    // Shadows for iOS
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 2 },
+    shadowOpacity: 0.1,
+    shadowRadius: 2,
+  },
+  
+  captureButtonInner: {
+    width: 60, // Diameter of the inner circle
+    height: 60, // Diameter of the inner circle
+    borderRadius: 30, // Half of the width/height to make it a perfect circle
+    backgroundColor: '#388E3C', // A slightly darker shade of the button color for contrast
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 });

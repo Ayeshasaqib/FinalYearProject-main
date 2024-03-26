@@ -28,7 +28,6 @@ const ContactUsScreen = () => {
   return (
     <ScrollView style={styles.container}>
       <View style={styles.content}>
-        <Text style={styles.header}>Contact Us</Text>
         <Image
           source={require('../assets/logo.png')} // Add an appropriate image
           style={styles.image}
@@ -77,11 +76,13 @@ const styles = StyleSheet.create({
   content: {
     padding: 20,
     alignItems: 'center', // Center the content
+    marginBottom: 40
+    
   },
   header: {
     fontSize: 26,
     fontWeight: 'bold',
-    color: '#386641', // Theme color for header
+    color: '#023020', // Theme color for header
     marginBottom: 20,
   },
   introText: {
@@ -111,7 +112,7 @@ const styles = StyleSheet.create({
   methodHeader: {
     fontSize: 18,
     fontWeight: 'bold',
-    color: '#386641',
+    color: '#023020',
     marginBottom: 5,
   },
   text: {

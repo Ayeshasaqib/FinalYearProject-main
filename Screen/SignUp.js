@@ -14,7 +14,7 @@ import MaterialIcons from 'react-native-vector-icons/MaterialIcons';
 import Ionicons from 'react-native-vector-icons/Ionicons';
 import CustomButton from '../component/CustomButton';
 import logoImage from '../assets/logo.png';
-const RegisterScreen = () => {
+const RegisterScreen = ({navigation}) => {
   const [date, setDate] = useState(new Date());
   const [open, setOpen] = useState(false);
   const [dobLabel, setDobLabel] = useState('Date of Birth');
@@ -118,7 +118,7 @@ const RegisterScreen = () => {
           </TouchableOpacity>
         </View>
 
-        <CustomButton label={'Register'} onPress={() => {}} />
+        <CustomButton label={'Register'} onPress={()=>navigation.navigate('Profile' )} />
 
         <View
           style={{
@@ -127,7 +127,7 @@ const RegisterScreen = () => {
             marginBottom: 30,
           }}>
           <Text>Already registered?</Text>
-          <TouchableOpacity onPress={() => {}}>
+          <TouchableOpacity onPress={()=>navigation.navigate('Login' )}>
             <Text style={{color: '#008000', fontWeight: '700'}}> Login</Text>
           </TouchableOpacity>
         </View>

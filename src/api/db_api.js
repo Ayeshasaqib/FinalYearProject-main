@@ -1,16 +1,16 @@
-const express= require('express');
-const router= express.Router();
+// const express= require('express');
+// const router= express.Router();
 
-//signup
+// //signup
 
-router.post('./signup',(req,res)=>{
+// router.post('./signup',(req,res)=>{
 
-})
+// })
 
-//signin
+// //signin
 
-router.post('./signin',(req,res)=>{
+// router.post('./signin',(req,res)=>{
   
-})
+// })
 
-module.exports = router;
+// module.exports = router;

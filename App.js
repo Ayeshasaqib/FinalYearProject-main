@@ -1,4 +1,4 @@
-import React from 'react';
+import React,{ useState, useEffect }  from 'react';
 import { StatusBar, StyleSheet, Text, ImageBackground, Header, TouchableOpacity, View, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -31,8 +31,22 @@ const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const updateStack = createStackNavigator();
 const profileStack = createStackNavigator();
+const startStack = createStackNavigator();
+// const [isUserLoggedIn, setIsUserLoggedIn] = useState(null);
+
+// useEffect(() => {
+//   const checkLoginStatus = async () => {
+//     const token = await AsyncStorage.getItem('userToken');
+//     setIsUserLoggedIn(true);
+//   };
+
+//   checkLoginStatus();
+// }, []);
+
+
 // Define Home stack navigator
 const HomeStackScreen = () => (
+
   <HomeStack.Navigator  >
     <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
     <HomeStack.Screen name="Disease Details" component={Pophandler} options={{ headerShown: false }} />
@@ -48,11 +62,31 @@ const UpdateStackScreen = () => (
 );
 const ProfileStackScreen = () => (
   <profileStack.Navigator  >
-    <profileStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
-    <profileStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-    <profileStack.Screen name="Sign up" component={RegisterScreen} options={{ headerShown: false }} />
-  </profileStack.Navigator>
+    {/* {isUserLoggedIn ? (
+          <> */}
+    <profileStack.Screen name="One" component={ OnBoardingScreenOne} options={{ headerShown: false }} /> 
+     <profileStack.Screen name="Two" component={ OnBoardingScreenTwo} options={{ headerShown: false }} />
+     <profileStack.Screen name="Three" component={ OnBoardingScreenThree} options={{ headerShown: false }} />
+    <profileStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} /> 
+     <profileStack.Screen name="Sign up" component={RegisterScreen} options={{ headerShown: false }} />
+     {/* </>):(<> */}
+     <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+     <profileStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+     <updateStack.Screen name="Setting" component={SettingsScreen} options={{ headerShown: false }} />
+     {/* </>)} */}
+    </profileStack.Navigator>
 );
+// const startStackScreen = () => (
+//   <startStack.Navigator  >
+//     <startStack.Screen name="One" component={ OnBoardingScreenOne} options={{ headerShown: false }} /> 
+//      <startStack.Screen name="Two" component={ OnBoardingScreenTwo} options={{ headerShown: false }} />
+//      <startStack.Screen name="Three" component={ OnBoardingScreenThree} options={{ headerShown: false }} />
+    
+//     <startStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} /> 
+//      <startStack.Screen name="Sign up" component={RegisterScreen} options={{ headerShown: false }} />
+     
+//     </profileStack.Navigator>
+// );
 const Stack = createNativeStackNavigator();
 
 
@@ -101,24 +135,25 @@ export default function App() {
        */}
       <StatusBar style="auto" />
       <Tab.Navigator initialRouteName="HomeStackScreen" screenOptions={screenOptions}>
-        <Tab.Screen
-          name="Support"
-          component={ContactUsScreen}
+      <Tab.Screen
+          name="Profile"
+          component={ProfileStackScreen}
           options={{
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <Entypo name="paper-plane" size={24} color={focused ? "#023020" : "#111"} />
-                <Text style={{ fontSize: 12, color: "#023020" }}>Support</Text>
+                <Ionicons name="person" size={24} color={focused ? "#023020	" : "#111"} />
+                <Text style={{ fontSize: 12, color: "#023020" }}>Profile</Text>
               </View>
             ),
-            headerTitle: () => <CustomHeader title="Support" />,
+            headerTitle: () => <CustomHeader title="Profile" />,
             headerRight: () => (
               <TouchableOpacity style={{ marginRight: 15 }}>
-                <Entypo name="paper-plane" size={28} color='white' />
+                <Ionicons name="person" size={26} color='white' />
               </TouchableOpacity>
             ),
           }}
         />
+      
         <Tab.Screen
           name="Updates"
           component={NotificationsScreen}
@@ -183,19 +218,19 @@ export default function App() {
           }}
         />
         <Tab.Screen
-          name="Profile"
-          component={ProfileStackScreen}
+          name="Support"
+          component={ContactUsScreen}
           options={{
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center", justifyContent: "center" }}>
-                <Ionicons name="person" size={24} color={focused ? "#023020	" : "#111"} />
-                <Text style={{ fontSize: 12, color: "#023020" }}>Profile</Text>
+                <Entypo name="paper-plane" size={24} color={focused ? "#023020" : "#111"} />
+                <Text style={{ fontSize: 12, color: "#023020" }}>Support</Text>
               </View>
             ),
-            headerTitle: () => <CustomHeader title="Profile" />,
+            headerTitle: () => <CustomHeader title="Support" />,
             headerRight: () => (
               <TouchableOpacity style={{ marginRight: 15 }}>
-                <Ionicons name="person" size={26} color='white' />
+                <Entypo name="paper-plane" size={28} color='white' />
               </TouchableOpacity>
             ),
           }}

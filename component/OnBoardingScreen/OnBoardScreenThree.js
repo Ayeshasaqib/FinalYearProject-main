@@ -5,18 +5,18 @@ import Dots from 'react-native-dots-pagination';
 import { useNavigation } from '@react-navigation/native';
 import ScreenOne from '../../assets/onBoard3.png';
 
-const OnBoardingScreenThree = () => {
-  const navigation = useNavigation();
+const OnBoardingScreenThree = ({navigation}) => {
+  
 
   return (
     <View style={styles.container}>
       <View style={styles.appbar}>
         <Button
           mode="contained"
-          textColor={'white'}
+          textColor={'black'}
           style={styles.button}
           onPress={() => {
-            //navigation.navigate('LoginScreen');
+            navigation.navigate('Three');
           }}
         >
           Skip

@@ -14,7 +14,7 @@ import logoImage from '../assets/logo.png';
 import CustomButton from '../component/CustomButton';
 import InputField from '../component/InputField';
 
-const LoginScreen = () => {
+const LoginScreen = ({navigation}) => {
   return (
     <KeyboardAvoidingView
       style={{ flex: 1 }}
@@ -62,11 +62,11 @@ const LoginScreen = () => {
             fieldButtonFunction={() => {}}
           />
 
-          <CustomButton label={"Login"} onPress={() => {}} />
+          <CustomButton label={"Login"} onPress={()=>navigation.navigate('Profile' )} />
 
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30, marginTop: 30 }}>
             <Text>New to the app?</Text>
-            <TouchableOpacity onPress={() => { /* navigation.navigate('Register') */ }}>
+            <TouchableOpacity onPress={()=>navigation.navigate('Sign up' )}>
               <Text style={{ color: '#023020', fontWeight: '700', marginLeft: 5 }}>Register</Text>
             </TouchableOpacity>
           </View>

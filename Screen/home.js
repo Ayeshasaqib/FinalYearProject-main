@@ -427,10 +427,8 @@ useEffect(() => {
         />
          
         <TouchableOpacity 
-              onPress={()=>navigation.navigate('HomeScreen', 
-                {screen: 'Disease Details',
-                params:
-                  { val: val },} )} 
+              onPress={()=>navigation.navigate('Disease Details',
+                  { val: val })} 
               style={styles.searchButton}>
           <MaterialIcons name="search" size={25} color="#FFFFFF" />
         </TouchableOpacity>

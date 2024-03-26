@@ -5,18 +5,18 @@ import Dots from 'react-native-dots-pagination';
 import { useNavigation } from '@react-navigation/native';
 import ScreenOne from '../../assets/OnBoard2.png';
 
-const OnBoardingScreenTwo = () => {
-  const navigation = useNavigation();
+const OnBoardingScreenTwo = ({navigation}) => {
+  
 
   return (
     <View style={styles.container}>
       <View style={styles.appbar}>
         <Button
           mode="contained"
-          textColor={'white'}
+          textColor={'black'}
           style={styles.button}
           onPress={() => {
-            //navigation.navigate('LoginScreen');
+            navigation.navigate('Login');
           }}
         >
           Skip

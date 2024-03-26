@@ -38,10 +38,19 @@ const Profile = ({navigation}) => {
               } >
           <Text>Sign up </Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity style={styles.actionButton}
+         onPress=
+         {
+             ()=>navigation.navigate('Setting' )
+         } >
           <Text>Settings</Text>
         </TouchableOpacity>
-        <TouchableOpacity style={styles.actionButton}>
+        <TouchableOpacity style={styles.actionButton}
+         onPress=
+         {
+             ()=>navigation.navigate('Login' )
+         } >
+        
           <Text>Log Out</Text>
         </TouchableOpacity>
       </View>

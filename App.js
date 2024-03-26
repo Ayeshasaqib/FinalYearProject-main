@@ -1,4 +1,4 @@
-import React,{ useState, useEffect }  from 'react';
+import React, { useState, useEffect } from 'react';
 import { StatusBar, StyleSheet, Text, ImageBackground, Header, TouchableOpacity, View, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -27,6 +27,7 @@ import LoginScreen from './Screen/login'
 import RegisterScreen from "./Screen/SignUp";
 import Pophandler from './component/pophandler';
 import CustomHeader from './component/header';
+import LeafTypeScreen from './Screen/Result';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const updateStack = createStackNavigator();
@@ -64,27 +65,27 @@ const ProfileStackScreen = () => (
   <profileStack.Navigator  >
     {/* {isUserLoggedIn ? (
           <> */}
-    <profileStack.Screen name="One" component={ OnBoardingScreenOne} options={{ headerShown: false }} /> 
-     <profileStack.Screen name="Two" component={ OnBoardingScreenTwo} options={{ headerShown: false }} />
-     <profileStack.Screen name="Three" component={ OnBoardingScreenThree} options={{ headerShown: false }} />
-    <profileStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} /> 
-     <profileStack.Screen name="Sign up" component={RegisterScreen} options={{ headerShown: false }} />
-     {/* </>):(<> */}
-     <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-     <profileStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
-     <updateStack.Screen name="Setting" component={SettingsScreen} options={{ headerShown: false }} />
-     {/* </>)} */}
-    </profileStack.Navigator>
+    <profileStack.Screen name="One" component={OnBoardingScreenOne} options={{ headerShown: false }} />
+    <profileStack.Screen name="Two" component={OnBoardingScreenTwo} options={{ headerShown: false }} />
+    <profileStack.Screen name="Three" component={OnBoardingScreenThree} options={{ headerShown: false }} />
+    <profileStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
+    <profileStack.Screen name="Sign up" component={RegisterScreen} options={{ headerShown: false }} />
+    {/* </>):(<> */}
+    <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+    <profileStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
+    <updateStack.Screen name="Setting" component={SettingsScreen} options={{ headerShown: false }} />
+    {/* </>)} */}
+  </profileStack.Navigator>
 );
 // const startStackScreen = () => (
 //   <startStack.Navigator  >
 //     <startStack.Screen name="One" component={ OnBoardingScreenOne} options={{ headerShown: false }} /> 
 //      <startStack.Screen name="Two" component={ OnBoardingScreenTwo} options={{ headerShown: false }} />
 //      <startStack.Screen name="Three" component={ OnBoardingScreenThree} options={{ headerShown: false }} />
-    
+
 //     <startStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} /> 
 //      <startStack.Screen name="Sign up" component={RegisterScreen} options={{ headerShown: false }} />
-     
+
 //     </profileStack.Navigator>
 // );
 const Stack = createNativeStackNavigator();
@@ -135,7 +136,7 @@ export default function App() {
        */}
       <StatusBar style="auto" />
       <Tab.Navigator initialRouteName="HomeStackScreen" screenOptions={screenOptions}>
-      <Tab.Screen
+        <Tab.Screen
           name="Profile"
           component={ProfileStackScreen}
           options={{
@@ -153,10 +154,17 @@ export default function App() {
             ),
           }}
         />
-      
+
         <Tab.Screen
           name="Updates"
-          component={NotificationsScreen}
+          // component={LeafTypeScreen} // Use the component directly
+          // initialParams={{ // Pass parameters using initialParams
+          //   leafType: "Corn",
+          //   disease: "Canker",
+          //   causes: 'Leaf diseases in apple trees can be caused by various factors, including fungal pathogens, bacterial infections, environmental stressors, and poor orchard management practices. Fungal diseases often thrive in humid conditions, while bacterial infections can spread through contaminated equipment or insect vectors',
+          //   remedies:'Leaf diseases in apple trees can be caused by various factors, including fungal pathogens, bacterial infections, environmental stressors, and poor orchard management practices. Fungal diseases often thrive in humid conditions, while bacterial infections can spread through contaminated equipment or insect vectors'
+          // }}
+          component={UpdateStackScreen}
           options={{
             tabBarIcon: ({ focused }) => (
               <View style={{ alignItems: "center", justifyContent: "center" }}>

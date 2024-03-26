@@ -1,25 +1,20 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
 
-const RESULT_MAPPING = ['SCAB APPLE', 'HEALTHY', 'MULTIDISEASE', 'Cedar Apple Rust','Disease 5','Disease 6'];
-
 const Output = ({ predictions }) => {
   let content;
 
   if (predictions) {
-    const highestPredictionIndex = predictions.indexOf(Math.max(...predictions));
-    const diseaseName = RESULT_MAPPING[highestPredictionIndex];
-    const probability = Math.round(predictions[highestPredictionIndex] * 100) + '%';
-
+    // Assuming 'predictions' now includes 'leafType', 'disease', and 'probability'
+    const { leafType, disease, probability } = predictions;
     content = (
       <View style={styles.predictionContainer}>
-        <Text style={styles.diseaseName}>Diagnosis: {diseaseName}</Text>
-        <Text style={styles.probability}>Probability: {probability}</Text>
+        <Text style={styles.leafType}>Leaf Type: {leafType}</Text>
+        <Text style={styles.diseaseName}>Disease: {disease}</Text>
       </View>
     );
   } else {
-    
-    content = <Text style={styles.noPrediction}>Upload or Take image of a Leaf to analyze for disease</Text>;
+    content = <Text style={styles.noPrediction}>Upload or Take an image of a leaf to analyze for disease</Text>;
   }
 
   return (
@@ -39,6 +34,12 @@ const styles = StyleSheet.create({
     padding: 15,
     borderRadius: 10,
     alignItems: 'center',
+  },
+  leafType: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#333',
+    marginBottom: 5, // Add some space between the leaf type and disease name
   },
   diseaseName: {
     fontSize: 20,

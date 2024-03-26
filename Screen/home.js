@@ -1,18 +1,20 @@
 // React and React Native core imports
 import React, { useState, useEffect } from 'react';
-import { StyleSheet, 
-View, 
-Text, 
-TouchableOpacity, 
-Modal, 
-Image, 
-ScrollView, 
-ActivityIndicator, 
-TextInput, 
-Alert, 
-KeyboardAvoidingView, 
-Platform,
-ImageBackground } from 'react-native';
+import {
+  StyleSheet,
+  View,
+  Text,
+  TouchableOpacity,
+  Modal,
+  Image,
+  ScrollView,
+  ActivityIndicator,
+  TextInput,
+  Alert,
+  KeyboardAvoidingView,
+  Platform,
+  ImageBackground
+} from 'react-native';
 import Background from '../component/background'; // Import the Background component
 // Third-party imports for icons and TensorFlow.js
 import { MaterialCommunityIcons, MaterialIcons } from '@expo/vector-icons';
@@ -31,6 +33,7 @@ import Output from '../Output';
 import POPULAR_PLANTS from '../src/api/diseases';
 import LoadingScreen from '../component/LoadingAnimation';
 import Pophandler from '../component/pophandler';
+import { LeafTypeScreen } from '../Screen/Result'; // Import the LeafTypeScreen component
 // Note: Ensure you have the necessary packages installed:
 // For icons, TensorFlow.js, permissions, and image picker:
 // expo install @expo/vector-icons expo-permissions expo-image-picker
@@ -39,41 +42,41 @@ import Pophandler from '../component/pophandler';
 
 class CustomL2Regularizer {
   constructor(l2) {
-      this.l2 = l2; // L2 regularization factor
+    this.l2 = l2; // L2 regularization factor
   }
 
   apply(x) {
-      // Apply L2 regularization: 0.5 * lambda * sum(square(weights))
-      return tf.mul(tf.scalar(0.5 * this.l2), tf.sum(tf.square(x)));
+    // Apply L2 regularization: 0.5 * lambda * sum(square(weights))
+    return tf.mul(tf.scalar(0.5 * this.l2), tf.sum(tf.square(x)));
   }
 
   getConfig() {
-      // Method for serialization
-      return { l2: this.l2 };
+    // Method for serialization
+    return { l2: this.l2 };
   }
 
   static get className() {
-      // Class name for TensorFlow.js to use during serialization
-      return 'L2';
+    // Class name for TensorFlow.js to use during serialization
+    return 'L2';
   }
 }
 
 
-export default HomeScreen = ({navigation}) => {
+export default HomeScreen = ({ navigation }) => {
   const [searchQuery, setSearchQuery] = useState('');
   const [image, setImage] = useState(null);
   const [isTfReady, setTfReady] = useState(false);
   //Models
   const [LeafTypemodel, setLeafTypemodel] = useState(null);
-  const [AppleModel,setAppleModel] = useState(null);
-  const [CornModel,setCornModel] = useState(null);
-  const [CitrusModel,setCitrusModel] = useState(null);
-  const [TomatoModel,setTomatoModel] = useState(null);
-  const [BananaModel,setBananaModel] = useState(null);
+  const [AppleModel, setAppleModel] = useState(null);
+  const [CornModel, setCornModel] = useState(null);
+  const [CitrusModel, setCitrusModel] = useState(null);
+  const [TomatoModel, setTomatoModel] = useState(null);
+  const [BananaModel, setBananaModel] = useState(null);
 
   const [leafType, setLeafType] = useState('');
   const [disease, setDisease] = useState('');
-  
+
   const [predictions, setPredictions] = useState(null);
   const [isAnalyzing, setIsAnalyzing] = useState(false);
   const [name, setname] = useState();
@@ -86,7 +89,7 @@ export default HomeScreen = ({navigation}) => {
   //       await tf.ready();
   //       setTfReady(true);
   //       tf.serialization.registerClass(CustomL2Regularizer);
-  
+
   //       const modelJson = require('../models/LeafType/model.json');
   //       const weights = require('../models/LeafType/shared.bin');
   //       const loadedModel = await tf.loadLayersModel(bundleResourceIO(modelJson, weights));
@@ -117,7 +120,7 @@ export default HomeScreen = ({navigation}) => {
   //       setTomatoModel(TomatoModelModel);
   //       console.log("Tomato Type Model loaded successfully");
 
-        
+
   //     } catch (error) {
   //       console.error("Error loading TensorFlow model:", error);
   //     }
@@ -127,40 +130,40 @@ export default HomeScreen = ({navigation}) => {
   // }, []);
 
 
-const loadModel = async (modelJson, modelWeights) => {
-  await tf.ready(); // Ensure TensorFlow.js is ready
-  tf.serialization.registerClass(CustomL2Regularizer);
+  const loadModel = async (modelJson, modelWeights) => {
+    await tf.ready(); // Ensure TensorFlow.js is ready
+    tf.serialization.registerClass(CustomL2Regularizer);
 
-  const model = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeights));
-  console.log('Model loaded successfully');
-  return model; // Return the loaded model
-};
-const loadModelsSequentially = async () => {
+    const model = await tf.loadLayersModel(bundleResourceIO(modelJson, modelWeights));
+    console.log('Model loaded successfully');
+    return model; // Return the loaded model
+  };
+  const loadModelsSequentially = async () => {
 
-  // Assuming modelJson1, weights1, modelJson2, weights2 are imported or defined elsewhere
-  const model1 = await loadModel(require('../models/LeafType/model.json'), require('../models/LeafType/shared.bin'));
-  // Use model1 as needed
-  setLeafTypemodel(model1)
-  const model2 = await loadModel(require('../models/Apple/model.json'), require('../models/Apple//shared.bin'));
-  setAppleModel(model2)
-  const model3 = await loadModel(require('../models/Citrus/model.json'), require('../models/Citrus//shared.bin'));
-  setCitrusModel(model3);
-  const model4 = await loadModel(require('../models/Corn/model.json'), require('../models/Corn//shared.bin'));
-  setCornModel(model4);
-  const model5 = await loadModel(require('../models/Tomato/model.json'), require('../models/Tomato//shared.bin'));
-  setTomatoModel(model5)
-  const model6 = await loadModel(require('../models/Banana/model.json'), require('../models/Banana//shared.bin'));
-  setBananaModel(model6)
-  // Use model2 as needed
-};
+    // Assuming modelJson1, weights1, modelJson2, weights2 are imported or defined elsewhere
+    const model1 = await loadModel(require('../models/LeafType/model.json'), require('../models/LeafType/shared.bin'));
+    // Use model1 as needed
+    setLeafTypemodel(model1)
+    const model2 = await loadModel(require('../models/Apple/model.json'), require('../models/Apple//shared.bin'));
+    setAppleModel(model2)
+    const model3 = await loadModel(require('../models/Citrus/model.json'), require('../models/Citrus//shared.bin'));
+    setCitrusModel(model3);
+    const model4 = await loadModel(require('../models/Corn/model.json'), require('../models/Corn//shared.bin'));
+    setCornModel(model4);
+    const model5 = await loadModel(require('../models/Tomato/model.json'), require('../models/Tomato//shared.bin'));
+    setTomatoModel(model5)
+    const model6 = await loadModel(require('../models/Banana/model.json'), require('../models/Banana//shared.bin'));
+    setBananaModel(model6)
+    // Use model2 as needed
+  };
 
-useEffect(() => {
-  loadModelsSequentially()
-    .then(() => console.log('All models loaded successfully'))
-    .catch(error => console.error('Model loading error:', error));
-}, []);
+  useEffect(() => {
+    loadModelsSequentially()
+      .then(() => console.log('All models loaded successfully'))
+      .catch(error => console.error('Model loading error:', error));
+  }, []);
 
-   const imageToTensor = async (source) => {
+  const imageToTensor = async (source) => {
     const response = await fetch(source.uri, {}, { isBinary: true });
     const rawImageData = await response.arrayBuffer();
     const { width, height, data } = jpeg.decode(rawImageData, { useTArray: true });
@@ -178,6 +181,7 @@ useEffect(() => {
     const resizedImg = tf.image.resizeBilinear(img, [224, 224]);
     return resizedImg.expandDims(0).toFloat().div(tf.scalar(255));
   };
+  
   useEffect(() => {
     (async () => {
       const mediaLibraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -206,7 +210,6 @@ useEffect(() => {
         case 3: return 'Grey Spot';
         case 4: return 'General Cedar Rust';
         case 5: return 'Serious Cedar Rust';
-        default: return 'Unknown Disease';
       }
     } else if (leafTypeIndex === 1) { // Placeholder for another type, specifics not provided
       switch (diseaseIndex) {
@@ -214,7 +217,6 @@ useEffect(() => {
         case 1: return 'Pestalotiopsis';
         case 2: return 'Healthy';
         case 3: return 'Sigatoka';
-        default: return 'Unknown Disease';
       }
     } else if (leafTypeIndex === 2) {
       switch (diseaseIndex) {
@@ -222,7 +224,6 @@ useEffect(() => {
         case 1: return 'Canker';
         case 2: return 'Greening';
         case 3: return 'Healthy';
-        default: return 'Unknown Disease';
       }
     } else if (leafTypeIndex === 3) {
       switch (diseaseIndex) {
@@ -230,7 +231,6 @@ useEffect(() => {
         case 1: return 'Grey Leaf Spot';
         case 2: return 'Healthy';
         case 3: return 'Common Rust';
-        default: return 'Unknown Disease';
       }
     } else if (leafTypeIndex === 4) {
       switch (diseaseIndex) {
@@ -243,10 +243,9 @@ useEffect(() => {
         case 6: return 'Spider Mites';
         case 7: return 'Target Spot';
         case 8: return 'Yellow Leaf Curl Virus';
-        default: return 'Unknown Disease';
       }
     }
-  
+
     return 'Leaf Type not recognized';
   };
   const handleImageSelection = async () => {
@@ -259,7 +258,7 @@ useEffect(() => {
         return;
       }
 
-    
+
       let response;
       const action = await showImagePickerOptions(); // Implement this function based on your UI
       if (action === 'camera') {
@@ -273,51 +272,51 @@ useEffect(() => {
         });
       }
 
-        // Convert image to tensor
-        const imageTensor = await imageToTensor(response);
-        
-        // Predict leaf type
-        const leafTypePrediction = await LeafTypemodel.predict(imageTensor);
-        console.log("leafTypePrediction Result")
-        console.log(leafTypePrediction.data())
-        const leafTypeIndex = leafTypePrediction.argMax(-1).dataSync()[0]; // Assuming the model outputs probabilities for each class
-        
-        // Based on the index, decide which model to use for further prediction
-        switch(leafTypeIndex) {
-          case 0: // Apple
-            handleSpecificDiseasePrediction(leafTypeIndex,imageTensor, AppleModel);
-            setLeafType("Apple")
-            break;
-          case 1:
-            handleSpecificDiseasePrediction(leafTypeIndex,imageTensor, AppleModel);
-            setLeafType("Banana")
-            break;
-          case 2:
-            handleSpecificDiseasePrediction(leafTypeIndex,imageTensor, CitrusModel);
-            setLeafType("Citrus")
-            break;
-          case 3:
-            handleSpecificDiseasePrediction(leafTypeIndex,imageTensor, CornModel);
-            setLeafType("Corn")
-            break;
-          case 4:
-            handleSpecificDiseasePrediction(leafTypeIndex,imageTensor, TomatoModel);
-            setLeafType("Tomato")
-            break;
-          default:
-            console.log("Leaf type not recognized.");
-        }
-        
+      // Convert image to tensor
+      const imageTensor = await imageToTensor(response);
+
+      // Predict leaf type
+      const leafTypePrediction = await LeafTypemodel.predict(imageTensor).data();
+      console.log(leafTypePrediction)
+      const leafTypeIndex = leafTypePrediction.indexOf(Math.max(...leafTypePrediction))
+      console.log(leafTypeIndex)
+
+      // Based on the index, decide which model to use for further prediction
+      switch (leafTypeIndex) {
+        case 0: // Apple
+          handleSpecificDiseasePrediction(leafTypeIndex, imageTensor, AppleModel);
+          setLeafType("Apple")
+          break;
+        case 1:
+          handleSpecificDiseasePrediction(leafTypeIndex, imageTensor, BananaModel);
+          setLeafType("Banana")
+          break;
+        case 2:
+          handleSpecificDiseasePrediction(leafTypeIndex, imageTensor, CitrusModel);
+          setLeafType("Citrus")
+          break;
+        case 3:
+          handleSpecificDiseasePrediction(leafTypeIndex, imageTensor, CornModel);
+          setLeafType("Corn")
+          break;
+        case 4:
+          handleSpecificDiseasePrediction(leafTypeIndex, imageTensor, TomatoModel);
+          setLeafType("Tomato")
+          break;
+        default:
+          console.log("Leaf type not recognized.");
+      }
+
     } catch (error) {
       console.error("Error in handleImageSelection:", error);
       setIsAnalyzing(false);
     }
-    
+
   };
 
-  
-  
-  const handleSpecificDiseasePrediction = async (leafTypeIndex,imageTensor, model) => {
+
+
+  const handleSpecificDiseasePrediction = async (leafTypeIndex, imageTensor, model) => {
     const diseasePrediction = await model.predict(imageTensor).data();
     console.log("diseasePrediction");
     console.log(diseasePrediction);
@@ -328,14 +327,14 @@ useEffect(() => {
     console.log("Disease")
     console.log(disease)
     setPredictions({
-      leafType: leafType, // The detected type of the leaf
+      leafType: leafType, // The detected type of the leafr
       disease: disease,   // The detected disease
     });
-    
-  
+
+
   }
 
- 
+
 
   async function showImagePickerOptions() {
     return new Promise((resolve) => {
@@ -363,14 +362,14 @@ useEffect(() => {
   }
   const handleSubmitEditing = () => {
     const foundplant = POPULAR_PLANTS.find(p => p.name.toLowerCase() == searchQuery.toLowerCase());
-    
+
     if (foundplant) {
       setval(foundplant.id);
     } else {
       setval(0)
       console.log("No matching plant found.");
     }
-  };  
+  };
 
   const renderPlantCard = (plant) => {
     return (
@@ -388,61 +387,61 @@ useEffect(() => {
       </TouchableOpacity>
     );
   };
-  
-    
+
+
   return (
-    <KeyboardAvoidingView 
-      style={styles.container} 
-      behavior={Platform.OS === "ios" ? "padding" : "height"} 
+    <KeyboardAvoidingView
+      style={styles.container}
+      behavior={Platform.OS === "ios" ? "padding" : "height"}
       keyboardVerticalOffset={Platform.OS === "ios" ? 90 : 80}
     >
-    <ImageBackground
-      source={require('../assets/back1.jpg')}
-      style={styles.background}
-    >
-    <ScrollView style={styles.fullScreen}>
-    
-    <ScrollView style={styles.container}>
-    <ScrollView horizontal={true} style={styles.carouselContainer} showsHorizontalScrollIndicator={false}>
-      {POPULAR_PLANTS.map(renderPlantCard)}
-    </ScrollView>
-      <View style={styles.welcomeContainer}>
-        <Text style={styles.headerText}>Welcome to Leaf Care</Text>
-        <Text style={styles.infoText}>
-            AI-Powered Leaf Disease Detection App
-        </Text>
-      </View>
-      
-      <CaptureButton onPress={handleImageSelection} imageSource={require('../assets/Leafbutton.png')} />
+      <ImageBackground
+        source={require('../assets/back1.jpg')}
+        style={styles.background}
+      >
+        <ScrollView style={styles.fullScreen}>
 
-      <Output predictions={predictions} />
+          <ScrollView style={styles.container}>
+            <ScrollView horizontal={true} style={styles.carouselContainer} showsHorizontalScrollIndicator={false}>
+              {POPULAR_PLANTS.map(renderPlantCard)}
+            </ScrollView>
+            <View style={styles.welcomeContainer}>
+              <Text style={styles.headerText}>Welcome to Leaf Care</Text>
+              <Text style={styles.infoText}>
+                AI-Powered Leaf Disease Detection App
+              </Text>
+            </View>
 
-      <View style={styles.searchContainer}>
-          <TextInput
-          style={styles.searchInput}
-          placeholder="Search plant by name"
-          value={searchQuery}
-          onChangeText={setSearchQuery}
-          onSubmitEditing={handleSubmitEditing}
-        />
-         
-        <TouchableOpacity 
-              onPress={()=>navigation.navigate('Disease Details',
-                  { val: val })} 
-              style={styles.searchButton}>
-          <MaterialIcons name="search" size={25} color="#FFFFFF" />
-        </TouchableOpacity>
-        
-      </View>
-    </ScrollView>
-    </ScrollView>
-    </ImageBackground>
+            <CaptureButton onPress={handleImageSelection} imageSource={require('../assets/Leafbutton.png')} />
+
+            <Output predictions={predictions} />
+
+            <View style={styles.searchContainer}>
+              <TextInput
+                style={styles.searchInput}
+                placeholder="Search plant by name"
+                value={searchQuery}
+                onChangeText={setSearchQuery}
+                onSubmitEditing={handleSubmitEditing}
+              />
+
+              <TouchableOpacity
+                onPress={() => navigation.navigate('Disease Details',
+                  { val: val })}
+                style={styles.searchButton}>
+                <MaterialIcons name="search" size={25} color="#FFFFFF" />
+              </TouchableOpacity>
+
+            </View>
+          </ScrollView>
+        </ScrollView>
+      </ImageBackground>
 
     </KeyboardAvoidingView>
     //</Background>
   );
-  }
-    
+}
+
 
 
 
@@ -477,7 +476,7 @@ const styles = StyleSheet.create({
   },
   plantHeadings: {
     fontWeight: 'bold',
-    fontSize:20,
+    fontSize: 20,
     paddingVertical: 5,
   },
   plantText: {
@@ -602,7 +601,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   image1: {
-    
+
     marginTop: 50,
     width: 300,
     height: 300,
@@ -612,9 +611,9 @@ const styles = StyleSheet.create({
   imageContainer: {
     //alignItems: 'center',
   },
- 
+
   uploadedText: {
-    
+
     fontSize: 20,
     marginTop: 10,
     color: 'green',
@@ -630,28 +629,28 @@ const styles = StyleSheet.create({
     marginVertical: 10, // Add margin for spacing
     backgroundColor: 'white'
   },
-  
-  modelbackground:{
-    flex:1,
-    backgroundColor:'rgba(0,0,0,0.5)',
-    justifyContent:'center',
-    alignItems:'center',
+
+  modelbackground: {
+    flex: 1,
+    backgroundColor: 'rgba(0,0,0,0.5)',
+    justifyContent: 'center',
+    alignItems: 'center',
   },
-  modelcontainer:{
-    width:'80%',
-    height:'80%',
-    backgroundColor:'white',
-    paddingHorizontal:20,
+  modelcontainer: {
+    width: '80%',
+    height: '80%',
+    backgroundColor: 'white',
+    paddingHorizontal: 20,
     //paddingVertical:30,
-    borderRadius:20,
-    elevation:20,
+    borderRadius: 20,
+    elevation: 20,
   },
-  closebutton:{
+  closebutton: {
     // marginTop:"0%",
     // alignItems:'center',
-    color:'Black',
+    color: 'Black',
     fontWeight: 'bold',
-    fontSize:20,
+    fontSize: 20,
   },
   background: {
     flex: 1,
@@ -670,7 +669,7 @@ const styles = StyleSheet.create({
     shadowRadius: 5,
     elevation: 8, // shadow for Android
     borderColor: '#023020',
-    borderWidth:1,
+    borderWidth: 1,
   },
   cardImage: {
     flex: 1, // image will fill the container
@@ -705,7 +704,7 @@ const styles = StyleSheet.create({
     shadowOpacity: 0.1,
     shadowRadius: 2,
   },
-  
+
   captureButtonInner: {
     width: 60, // Diameter of the inner circle
     height: 60, // Diameter of the inner circle

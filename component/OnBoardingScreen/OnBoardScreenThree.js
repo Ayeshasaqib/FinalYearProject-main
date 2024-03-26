@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import React from 'react';
 import { Card, Button } from 'react-native-paper';
 import { Image, StyleSheet, View, Text, Dimensions } from 'react-native';
@@ -6,7 +7,12 @@ import { useNavigation } from '@react-navigation/native';
 import ScreenOne from '../../assets/OnBoard3.png';
 
 const OnBoardingScreenThree = ({navigation}) => {
-  
+  useEffect(() => {
+    const timer = setTimeout(() => {
+      navigation.navigate('Login');
+    }, 3000); // 3 seconds
+    return () => clearTimeout(timer);
+  }, []);
 
   return (
     <View style={styles.container}>
@@ -47,7 +53,7 @@ const OnBoardingScreenThree = ({navigation}) => {
               activeColor="#230"
               activeDotHeight={height * 0.03} // Example of using percentage of screen height
             />
-            <Button
+            {/* <Button
               mode="contained"
               style={styles.nextButton}
               onPress={() => {
@@ -55,7 +61,7 @@ const OnBoardingScreenThree = ({navigation}) => {
               }}
             >
               Next
-            </Button>
+            </Button> */}
           </View>
         </Card.Content>
       </Card>

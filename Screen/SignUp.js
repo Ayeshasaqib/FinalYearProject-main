@@ -118,7 +118,7 @@ const RegisterScreen = ({navigation}) => {
           </TouchableOpacity>
         </View>
 
-        <CustomButton label={'Register'} onPress={()=>navigation.navigate('Profile' )} />
+        <CustomButton label={'Register'} onPress={()=>navigation.navigate('HomeStackScreen' )} />
 
         <View
           style={{

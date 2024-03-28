@@ -22,7 +22,7 @@ const OnBoardingScreenTwo = ({navigation}) => {
           textColor={'black'}
           style={styles.button}
           onPress={() => {
-            navigation.navigate('Login');
+            navigation.navigate('Three');
           }}
         >
           Skip

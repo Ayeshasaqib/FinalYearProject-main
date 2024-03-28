@@ -28,29 +28,20 @@ import RegisterScreen from "./Screen/SignUp";
 import Pophandler from './component/pophandler';
 import CustomHeader from './component/header';
 import LeafTypeScreen from './Screen/Result';
+const [isTabBarVisible, setTabBarVisible] = useState(true);
+
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const updateStack = createStackNavigator();
 const profileStack = createStackNavigator();
 const startStack = createStackNavigator();
-// const [isUserLoggedIn, setIsUserLoggedIn] = useState(null);
-
-// useEffect(() => {
-//   const checkLoginStatus = async () => {
-//     const token = await AsyncStorage.getItem('userToken');
-//     setIsUserLoggedIn(true);
-//   };
-
-//   checkLoginStatus();
-// }, []);
-
 
 // Define Home stack navigator
 const HomeStackScreen = () => (
 
   <HomeStack.Navigator  >
     <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
-    <HomeStack.Screen name="Disease Details" component={Pophandler} options={{ headerShown: false }} />
+    <HomeStack.Screen name="Results" component={LeafTypeScreen} options={{ headerShown: false }} /> <HomeStack.Screen name="Disease Details" component={Pophandler} options={{ headerShown: false }} />
   </HomeStack.Navigator>
 );
 const UpdateStackScreen = () => (
@@ -63,31 +54,54 @@ const UpdateStackScreen = () => (
 );
 const ProfileStackScreen = () => (
   <profileStack.Navigator  >
-    {/* {isUserLoggedIn ? (
-          <> */}
-    <profileStack.Screen name="One" component={OnBoardingScreenOne} options={{ headerShown: false }} />
-    <profileStack.Screen name="Two" component={OnBoardingScreenTwo} options={{ headerShown: false }} />
-    <profileStack.Screen name="Three" component={OnBoardingScreenThree} options={{ headerShown: false }} />
-    <profileStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} />
-    <profileStack.Screen name="Sign up" component={RegisterScreen} options={{ headerShown: false }} />
-    {/* </>):(<> */}
     <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
     <profileStack.Screen name="Profile" component={ProfileScreen} options={{ headerShown: false }} />
     <updateStack.Screen name="Setting" component={SettingsScreen} options={{ headerShown: false }} />
-    {/* </>)} */}
+    <startStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}
+     listeners={({ navigation, route }) => ({
+      focus: () => setTabBarVisible(false), // Hide tab bar
+      blur: () => setTabBarVisible(true), // Show tab bar on leaving the screen
+      
+    })} /> 
   </profileStack.Navigator>
 );
-// const startStackScreen = () => (
-//   <startStack.Navigator  >
-//     <startStack.Screen name="One" component={ OnBoardingScreenOne} options={{ headerShown: false }} /> 
-//      <startStack.Screen name="Two" component={ OnBoardingScreenTwo} options={{ headerShown: false }} />
-//      <startStack.Screen name="Three" component={ OnBoardingScreenThree} options={{ headerShown: false }} />
+const startStackScreen = () => (
+  <startStack.Navigator  >
+    <startStack.Screen name="One" component={ OnBoardingScreenOne} options={{ headerShown: false }} 
+     listeners={({ navigation, route }) => ({
+      focus: () => setTabBarVisible(false), // Hide tab bar
+    })}
+    /> 
+     <startStack.Screen name="Two" component={ OnBoardingScreenTwo} options={{ headerShown: false }} 
+      listeners={({ navigation, route }) => ({
+        focus: () => setTabBarVisible(false), // Hide tab bar
 
-//     <startStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }} /> 
-//      <startStack.Screen name="Sign up" component={RegisterScreen} options={{ headerShown: false }} />
+      })}
+      />
+     <startStack.Screen name="Three" component={ OnBoardingScreenThree} options={{ headerShown: false }}
+      listeners={({ navigation, route }) => ({
+        focus: () => setTabBarVisible(false), // Hide tab bar
 
-//     </profileStack.Navigator>
-// );
+      })}
+       />
+
+    <startStack.Screen name="Login" component={LoginScreen} options={{ headerShown: false }}
+     listeners={({ navigation, route }) => ({
+      focus: () => setTabBarVisible(false), // Hide tab bar
+      blur: () => setTabBarVisible(true), // Show tab bar on leaving the screen
+      
+    })} /> 
+    <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
+
+     <startStack.Screen name="Sign up" component={RegisterScreen} options={{ headerShown: false }}
+      listeners={({ navigation, route }) => ({
+        focus: () => setTabBarVisible(false), // Hide tab bar
+        blur: () => setTabBarVisible(true), // Show tab bar on leaving the screen
+      })} />
+
+    </startStack.Navigator>
+);
+
 const Stack = createNativeStackNavigator();
 
 
@@ -95,15 +109,24 @@ const Stack = createNativeStackNavigator();
 
 const screenOptions = {
   tabBarShowLabel: false,
-  tabBarStyle: {
-    position: 'absolute',
+  tabBarStyle: { display: isTabBarVisible ?
+    {position: 'absolute',
     bottom: 0,
     right: 0,
     left: 0,
     elevation: 0,
     height: 60,
-    backgroundColor: '#fff', // Corrected property name
-  },
+    backgroundColor: '#fff',} 
+     : 'none' },
+  // tabBarStyle: {
+  //   position: 'absolute',
+  //   bottom: 0,
+  //   right: 0,
+  //   left: 0,
+  //   elevation: 0,
+  //   height: 60,
+  //   backgroundColor: '#fff', // Corrected property name
+  // },
   headerStyle: {
     height: 90,
     borderBottomLeftRadius: 50,
@@ -135,7 +158,7 @@ export default function App() {
       </Stack.Navigator>
        */}
       <StatusBar style="auto" />
-      <Tab.Navigator initialRouteName="HomeStackScreen" screenOptions={screenOptions}>
+      <Tab.Navigator initialRouteName="startStackScreen" screenOptions={screenOptions}>
         <Tab.Screen
           name="Profile"
           component={ProfileStackScreen}

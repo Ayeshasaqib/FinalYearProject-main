@@ -1,16 +1,23 @@
 import React from 'react';
 import { Text, View, StyleSheet } from 'react-native';
+import POPULAR_PLANTS from './src/api/diseases';
 
 const Output = ({ predictions }) => {
   let content;
-
   if (predictions) {
     // Assuming 'predictions' now includes 'leafType', 'disease', and 'probability'
     const { leafType, disease, probability } = predictions;
+    const plant = POPULAR_PLANTS.find(p => p.name === disease);
+
     content = (
       <View style={styles.predictionContainer}>
+        <Text style={styles.leafType}>Reports</Text>
+
         <Text style={styles.leafType}>Leaf Type: {leafType}</Text>
         <Text style={styles.diseaseName}>Disease: {disease}</Text>
+        <Text style={styles.diseaseName}>Symptoms: {plant.symptoms}</Text>
+        <Text style={styles.diseaseName}>Remedies: {plant.remedies}</Text>
+
       </View>
     );
   } else {
@@ -45,6 +52,7 @@ const styles = StyleSheet.create({
     fontSize: 20,
     fontWeight: 'bold',
     color: '#333',
+    justifyContent: 'center'
   },
   probability: {
     fontSize: 16,

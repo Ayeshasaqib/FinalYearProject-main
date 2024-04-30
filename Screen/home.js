@@ -31,6 +31,7 @@ import * as jpeg from 'jpeg-js';
 // Local imports from your project structure
 import Output from '../Output';
 import POPULAR_PLANTS from '../src/api/diseases';
+
 import LoadingScreen from '../component/LoadingAnimation';
 import Pophandler from '../component/pophandler';
 import { LeafTypeScreen } from '../Screen/Result'; // Import the LeafTypeScreen component
@@ -163,7 +164,7 @@ export default HomeScreen = ({ navigation }) => {
       .catch(error => console.error('Model loading error:', error));
   }, []);
 
-  const imageToTensor = async (source) => {
+  const imageToTensor = async (source, size) => {
     const response = await fetch(source.uri, {}, { isBinary: true });
     const rawImageData = await response.arrayBuffer();
     const { width, height, data } = jpeg.decode(rawImageData, { useTArray: true });
@@ -178,10 +179,10 @@ export default HomeScreen = ({ navigation }) => {
     }
 
     const img = tf.tensor3d(buffer, [width, height, 3]);
-    const resizedImg = tf.image.resizeBilinear(img, [224, 224]);
+    const resizedImg = tf.image.resizeBilinear(img, [size, size]);
     return resizedImg.expandDims(0).toFloat().div(tf.scalar(255));
   };
-  
+
   useEffect(() => {
     (async () => {
       const mediaLibraryStatus = await ImagePicker.requestMediaLibraryPermissionsAsync();
@@ -202,52 +203,87 @@ export default HomeScreen = ({ navigation }) => {
     setIsAnalyzing(false);
   };
   const determineDisease = (diseaseIndex, leafTypeIndex) => {
-    if (leafTypeIndex === 0) { // Assuming 0 is Apple
-      switch (diseaseIndex) {
-        case 0: return 'Healthy Apple';
-        case 1: return 'General Scab';
-        case 2: return 'Serious Scab';
-        case 3: return 'Grey Spot';
-        case 4: return 'General Cedar Rust';
-        case 5: return 'Serious Cedar Rust';
-      }
-    } else if (leafTypeIndex === 1) { // Placeholder for another type, specifics not provided
-      switch (diseaseIndex) {
-        case 0: return 'Cordana';
-        case 1: return 'Pestalotiopsis';
-        case 2: return 'Healthy';
-        case 3: return 'Sigatoka';
-      }
-    } else if (leafTypeIndex === 2) {
-      switch (diseaseIndex) {
-        case 0: return 'Black Spot';
-        case 1: return 'Canker';
-        case 2: return 'Greening';
-        case 3: return 'Healthy';
-      }
-    } else if (leafTypeIndex === 3) {
-      switch (diseaseIndex) {
-        case 0: return 'Blight Disease';
-        case 1: return 'Grey Leaf Spot';
-        case 2: return 'Healthy';
-        case 3: return 'Common Rust';
-      }
-    } else if (leafTypeIndex === 4) {
-      switch (diseaseIndex) {
-        case 0: return 'Early Blight Disease';
-        case 1: return 'Healthy';
-        case 2: return 'Late Blight';
-        case 3: return 'Leaf Mold';
-        case 4: return 'Mosaic Virus';
-        case 5: return 'Septoria Leaf Spot';
-        case 6: return 'Spider Mites';
-        case 7: return 'Target Spot';
-        case 8: return 'Yellow Leaf Curl Virus';
-      }
+    let leafType = '';
+    let disease = '';
+  
+    // Map leaf type index to its name
+    switch (leafTypeIndex) {
+      case 0: 
+        leafType = "Apple";
+        break;
+      case 1:
+        leafType = "Banana";
+        break;
+      case 2:
+        leafType = "Citrus";
+        break;
+      case 3:
+        leafType = "Corn";
+        break;
+      case 4:
+        leafType = "Tomato";
+        break;
+      default:
+        console.log("Leaf type not recognized.");
+        leafType = "Unknown";
     }
-
-    return 'Leaf Type not recognized';
+  
+    // Based on the leaf type, map disease index to its name
+    if (leafType === "Apple") {
+      switch (diseaseIndex) {
+        case 0: disease = 'Healthy Apple'; break;
+        case 1: disease = 'General Scab'; break;
+        case 2: disease = 'Serious Scab'; break;
+        case 3: disease = 'Grey Spot'; break;
+        case 4: disease = 'General Cedar Rust'; break;
+        case 5: disease = 'Serious Cedar Rust'; break;
+        default: disease = "Unknown Disease";
+      }
+    } else if (leafType === "Banana") {
+      switch (diseaseIndex) {
+        case 0: disease = 'Cordana'; break;
+        case 1: disease = 'Pestalotiopsis'; break;
+        case 2: disease = 'Healthy Banana'; break;
+        case 3: disease = 'Sigatoka'; break;
+        default: disease = "Unknown Disease";
+      }
+    } else if (leafType === "Citrus") {
+      switch (diseaseIndex) {
+        case 0: disease = 'Black Spot'; break;
+        case 1: disease = 'Canker'; break;
+        case 2: disease = 'Greening'; break;
+        case 3: disease = 'Healthy Citrus'; break;
+        default: disease = "Unknown Disease";
+      }
+    } else if (leafType === "Corn") {
+      switch (diseaseIndex) {
+        case 0: disease = 'Blight Disease'; break;
+        case 1: disease = 'Grey Leaf Spot'; break;
+        case 2: disease = 'Healthy Corn'; break;
+        case 3: disease = 'Common Rust'; break;
+        default: disease = "Unknown Disease";
+      }
+    } else if (leafType === "Tomato") {
+      switch (diseaseIndex) {
+        case 0: disease = 'Bacterial Spot Disease'; break;
+        case 0: disease = 'Early Blight Disease'; break;
+        case 1: disease = 'Healthy Tomato'; break;
+        case 2: disease = 'Late Blight'; break;
+        case 3: disease = 'Leaf Mold'; break;
+        case 4: disease = 'Mosaic Virus'; break;
+        case 5: disease = 'Septoria Leaf Spot'; break;
+        case 6: disease = 'Spider Mites'; break;
+        case 7: disease = 'Target Spot'; break;
+        case 8: disease = 'Yellow Leaf Curl Virus'; break;
+        default: disease = "Unknown Disease";
+      }
+    } else {
+      disease = "Unknown Disease"; // Fallback for when the leaf type is not recognized
+    }
+  
+    return { leafType, disease };
   };
+  
   const handleImageSelection = async () => {
     try {
       const cameraPermissionResult = await ImagePicker.requestCameraPermissionsAsync();
@@ -273,10 +309,11 @@ export default HomeScreen = ({ navigation }) => {
       }
 
       // Convert image to tensor
-      const imageTensor = await imageToTensor(response);
+      const imageTensorSize128 = await imageToTensor(response, 128);
+      const imageTensorSize224 = await imageToTensor(response, 224);
 
       // Predict leaf type
-      const leafTypePrediction = await LeafTypemodel.predict(imageTensor).data();
+      const leafTypePrediction = await LeafTypemodel.predict(imageTensorSize224).data();
       console.log(leafTypePrediction)
       const leafTypeIndex = leafTypePrediction.indexOf(Math.max(...leafTypePrediction))
       console.log(leafTypeIndex)
@@ -284,24 +321,19 @@ export default HomeScreen = ({ navigation }) => {
       // Based on the index, decide which model to use for further prediction
       switch (leafTypeIndex) {
         case 0: // Apple
-          handleSpecificDiseasePrediction(leafTypeIndex, imageTensor, AppleModel);
-          setLeafType("Apple")
+          handleSpecificDiseasePrediction(leafTypeIndex, imageTensorSize224, AppleModel);
           break;
         case 1:
-          handleSpecificDiseasePrediction(leafTypeIndex, imageTensor, BananaModel);
-          setLeafType("Banana")
+          handleSpecificDiseasePrediction(leafTypeIndex, imageTensorSize224, BananaModel);
           break;
         case 2:
-          handleSpecificDiseasePrediction(leafTypeIndex, imageTensor, CitrusModel);
-          setLeafType("Citrus")
+          handleSpecificDiseasePrediction(leafTypeIndex, imageTensorSize224, CitrusModel);
           break;
         case 3:
-          handleSpecificDiseasePrediction(leafTypeIndex, imageTensor, CornModel);
-          setLeafType("Corn")
+          handleSpecificDiseasePrediction(leafTypeIndex, imageTensorSize224, CornModel);
           break;
         case 4:
-          handleSpecificDiseasePrediction(leafTypeIndex, imageTensor, TomatoModel);
-          setLeafType("Tomato")
+          handleSpecificDiseasePrediction(leafTypeIndex, imageTensorSize224, TomatoModel);
           break;
         default:
           console.log("Leaf type not recognized.");
@@ -314,25 +346,27 @@ export default HomeScreen = ({ navigation }) => {
 
   };
 
-
+  
 
   const handleSpecificDiseasePrediction = async (leafTypeIndex, imageTensor, model) => {
     const diseasePrediction = await model.predict(imageTensor).data();
-    console.log("diseasePrediction");
     console.log(diseasePrediction);
     const diseaseIndex = diseasePrediction.indexOf(Math.max(...diseasePrediction));
-    console.log("diseaseIndex")
-    console.log(diseaseIndex)
-    setDisease(determineDisease(diseaseIndex, leafTypeIndex)); // Implement this function based on your model output    console.log(predictionArray);
-    console.log("Disease")
-    console.log(disease)
+    console.log(`Disease Index ${diseaseIndex}, Leaf Type Index ${leafTypeIndex}`);
+    const { leafType, disease } = determineDisease(diseaseIndex, leafTypeIndex);
+    console.log(`Disease Name ${disease}, Leaf Type ${leafType}`);
+    // Now you can set them in the state if needed or use them directly
+    setLeafType(leafType);
+    setDisease(disease);
+
     setPredictions({
-      leafType: leafType, // The detected type of the leafr
-      disease: disease,   // The detected disease
+      leafType, // The detected type of the leaf
+      disease   // The detected disease
     });
+    //navigate to result screen with params leaftype, disease 
 
-
-  }
+  };
+  
 
 
 

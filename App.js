@@ -1,4 +1,6 @@
 import React, { useState, useEffect } from 'react';
+import { LogBox } from 'react-native';
+LogBox.ignoreAllLogs(); // Ignore all log notifications
 import { StatusBar, StyleSheet, Text, ImageBackground, Header, TouchableOpacity, View, Platform } from 'react-native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createBottomTabNavigator } from '@react-navigation/bottom-tabs';
@@ -27,7 +29,6 @@ import LoginScreen from './Screen/login'
 import RegisterScreen from "./Screen/SignUp";
 import Pophandler from './component/pophandler';
 import CustomHeader from './component/header';
-import LeafTypeScreen from './Screen/Result';
 const Tab = createBottomTabNavigator();
 const HomeStack = createStackNavigator();
 const updateStack = createStackNavigator();
@@ -51,6 +52,7 @@ const HomeStackScreen = () => (
   <HomeStack.Navigator  >
     <HomeStack.Screen name="Home" component={HomeScreen} options={{ headerShown: false }} />
     <HomeStack.Screen name="Disease Details" component={Pophandler} options={{ headerShown: false }} />
+
   </HomeStack.Navigator>
 );
 const UpdateStackScreen = () => (
@@ -157,10 +159,10 @@ export default function App() {
 
         <Tab.Screen
           name="Updates"
-          // component={LeafTypeScreen} // Use the component directly
+          // component={Leaftype} // Use the component directly
           // initialParams={{ // Pass parameters using initialParams
           //   leafType: "Corn",
-          //   disease: "Canker",
+          //   disease: "Canker", 
           //   causes: 'Leaf diseases in apple trees can be caused by various factors, including fungal pathogens, bacterial infections, environmental stressors, and poor orchard management practices. Fungal diseases often thrive in humid conditions, while bacterial infections can spread through contaminated equipment or insect vectors',
           //   remedies:'Leaf diseases in apple trees can be caused by various factors, including fungal pathogens, bacterial infections, environmental stressors, and poor orchard management practices. Fungal diseases often thrive in humid conditions, while bacterial infections can spread through contaminated equipment or insect vectors'
           // }}
@@ -172,6 +174,7 @@ export default function App() {
                 <Text style={{ fontSize: 12, color: "#023020" }}>Updates</Text>
               </View>
             ),
+            headerShown: false,
             headerTitle: () => <CustomHeader title="Updates" />,
             headerRight: () => (
               <TouchableOpacity style={{ marginRight: 15 }}>

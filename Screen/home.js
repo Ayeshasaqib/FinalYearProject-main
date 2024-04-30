@@ -83,6 +83,8 @@ export default HomeScreen = ({ navigation }) => {
   const [name, setname] = useState();
   const [val, setval] = useState();
   const [isLoading, setIsLoading] = useState(true);
+  
+  const [wwait, setwwait] = useState(false);
 
   //   (async () => {
   //     setIsLoading(true); // Start loading
@@ -360,6 +362,24 @@ export default HomeScreen = ({ navigation }) => {
     setDisease(disease);
 
     setPredictions({
+      
+      leafType: leafType, // The detected type of the leafr
+      disease: disease,   // The detected disease
+
+    })
+    setwwait(true);
+    
+  // Use useEffect to trigger navigation when wwait changes
+  useEffect(() => {
+    // Check if wwait is true
+    if (wwait) {
+      // Navigate to 'Results' screen with predictions
+      navigation.navigate('Results', {
+        leafType:leafType,
+        disease: disease,
+      });
+    }
+  }, [wwait]); // Run this effect when wwait changes
       leafType, // The detected type of the leaf
       disease   // The detected disease
     });
@@ -437,7 +457,19 @@ export default HomeScreen = ({ navigation }) => {
 
           <ScrollView style={styles.container}>
             <ScrollView horizontal={true} style={styles.carouselContainer} showsHorizontalScrollIndicator={false}>
-              {POPULAR_PLANTS.map(renderPlantCard)}
+              {POPULAR_PLANTS.map(  
+              <TouchableOpacity
+                key={plant.id}
+                onPress={() => navigation.navigate('Disease Details', { val: plant.id })}
+                style={styles.cardContainer}
+              >
+                <ImageBackground source={plant.imageUri} style={styles.cardImage} imageStyle={styles.cardImageInner}>
+                  <View style={styles.cardOverlay}>
+                    <Text style={styles.cardTitle}>{plant.name}</Text>
+                  {/* You can add more details or actions here */}
+                </View>
+              </ImageBackground>
+            </TouchableOpacity>)}
             </ScrollView>
             <View style={styles.welcomeContainer}>
               <Text style={styles.headerText}>Welcome to Leaf Care</Text>

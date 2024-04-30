@@ -2,8 +2,15 @@ import React from 'react';
 import { ScrollView, View, Text, StyleSheet } from 'react-native';
 import { Card, ListItem, Icon } from 'react-native-elements';
 
-const LeafTypeScreen = ({ route }) => {
-  const { leafType, disease, causes, remedies } = route.params;
+const LeafTypeScreen = ({ route ,navigation}) => {
+  //const { leafType, disease, causes, remedies } = route.params;
+  const plant = POPULAR_PLANTS.find(p => p.name === route?.params?.disease );
+  if (!plant) {
+    Console.log('Name of disease is not correct');
+    return null;
+  }
+  else{
+
 
   return (
     <ScrollView style={styles.container}>
@@ -14,31 +21,33 @@ const LeafTypeScreen = ({ route }) => {
       <Card containerStyle={styles.card}>
       <ListItem bottomDivider containerStyle={styles.listItem}>
           <ListItem.Content style={styles.listItemContent}>
-            <Text style={styles.title}>Leaf Type:</Text>
-            <Text style={styles.value}>{leafType}</Text>
-          </ListItem.Content>
-        </ListItem>
-        <ListItem bottomDivider containerStyle={styles.listItem}>
-          <ListItem.Content style={styles.listItemContent}>
             <Text style={styles.title}>Disease:</Text>
-            <Text style={styles.value}>{disease}</Text>
+            <Text style={styles.value}>{plant.name}</Text>
           </ListItem.Content>
         </ListItem>
+      <ListItem bottomDivider containerStyle={styles.listItem}>
+          <ListItem.Content style={styles.listItemContent}>
+            <Text style={styles.title}>Diagnosis</Text>
+            <Text style={styles.value}>{plant.symptoms}</Text>
+          </ListItem.Content>
+        </ListItem>
+      
         <ListItem bottomDivider>
           <ListItem.Content>
             <ListItem.Title style={styles.title}>Causes:</ListItem.Title>
-            <ListItem.Subtitle style={styles.subtitle}>{causes}</ListItem.Subtitle>
+            <ListItem.Subtitle style={styles.subtitle}>{plant.causes}</ListItem.Subtitle>
           </ListItem.Content>
         </ListItem>
         <ListItem bottomDivider>
           <ListItem.Content>
             <ListItem.Title style={styles.title}>Remedies:</ListItem.Title>
-            <ListItem.Subtitle style={styles.subtitle}>{remedies}</ListItem.Subtitle>
+            <ListItem.Subtitle style={styles.subtitle}>{plant.remedies}</ListItem.Subtitle>
           </ListItem.Content>
         </ListItem>
       </Card>
     </ScrollView>
   );
+}
 };
 
 const styles = StyleSheet.create({

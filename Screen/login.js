@@ -62,7 +62,7 @@ const LoginScreen = ({navigation}) => {
             fieldButtonFunction={() => {}}
           />
 
-          <CustomButton label={"Login"} onPress={()=>navigation.navigate('Profile' )} />
+          <CustomButton label={"Login"} onPress={()=>navigation.navigate('HomeStackScreen' )} />
 
           <View style={{ flexDirection: 'row', justifyContent: 'center', marginBottom: 30, marginTop: 30 }}>
             <Text>New to the app?</Text>

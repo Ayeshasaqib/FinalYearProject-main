@@ -4,7 +4,7 @@ import { Card, Button } from 'react-native-paper';
 import { Image, StyleSheet, View, Text, Dimensions } from 'react-native';
 import Dots from 'react-native-dots-pagination';
 import { useNavigation } from '@react-navigation/native';
-import ScreenOne from '../../assets/OnBoard3.png';
+import ScreenOne from '../../assets/onBoard3.png';
 
 const OnBoardingScreenThree = ({navigation}) => {
   useEffect(() => {
